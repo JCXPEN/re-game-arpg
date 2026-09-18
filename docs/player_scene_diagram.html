@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>玩家节点位置 & 碰撞层分布</title>
+<style>
+  :root{
+    --bg:#0e0f1a; --panel:#171a2b; --panel2:#1f2238;
+    --line:#3a3f5c; --txt:#e6e8f0; --sub:#9aa0c0;
+    --accent:#ffcb5b; --accent2:#5bd1ff; --green:#5bffa0; --red:#ff7b7b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 600px at 50% -10%,#1b1e33,#0e0f1a);
+       color:var(--txt);font-family:"Segoe UI",system-ui,"Microsoft YaHei",sans-serif;padding:28px;}
+  h1{font-size:20px;margin:0 0 4px;font-weight:600}
+  .hint{color:var(--sub);font-size:13px;margin-bottom:22px}
+  .wrap{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+        padding:18px 20px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+  .card h2{font-size:14px;margin:0 0 14px;color:var(--accent);letter-spacing:.5px}
+  /* 场景树 */
+  .tree{font-family:"JetBrains Mono",Consolas,monospace;font-size:13px;line-height:1.9}
+  .node{display:flex;align-items:center;gap:8px;padding:2px 0}
+  .box{display:inline-block;min-width:14px;color:var(--line)}
+  .tag{font-size:10px;padding:1px 7px;border-radius:20px;border:1px solid var(--line);
+       color:var(--sub);margin-left:6px}
+  .t-autoload{color:#9aa0c0}
+  .t-boot{color:#fff;font-weight:600}
+  .t-world{color:#cdd3ff}
+  .t-player{color:var(--accent);font-weight:700}
+  .t-ui{color:var(--accent2)}
+  .t-sub{color:var(--sub)}
+  .pill{background:rgba(255,203,91,.12);border-color:rgba(255,203,91,.5);color:var(--accent)}
+  .pill2{background:rgba(91,209,255,.10);border-color:rgba(91,209,255,.4);color:var(--accent2)}
+  /* 碰撞层网格 */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:460px}
+  .cell{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--panel2)}
+  .cell .n{font-size:11px;color:var(--sub)}
+  .cell .nm{font-size:13px;font-weight:600;margin-top:2px}
+  .cell.player{border-color:var(--accent);background:rgba(255,203,91,.10);
+               box-shadow:0 0 0 1px rgba(255,203,91,.35) inset}
+  .cell .who{font-size:10px;color:var(--accent);margin-top:4px}
+  .legend{margin-top:14px;font-size:11px;color:var(--sub)}
+  .legend b{color:var(--accent)}
+  .foot{margin-top:20px;color:var(--sub);font-size:12px;max-width:760px;line-height:1.7}
+  .foot code{background:#000;padding:1px 6px;border-radius:5px;color:var(--green)}
+</style>
+</head>
+<body>
+  <h1>玩家节点在场景树里的位置 & 它占用的碰撞层</h1>
+  <div class="hint">左：场景树（Boot 容器 / 关卡 / 玩家挂载点） &nbsp;|&nbsp; 右：project.godot 的 10 个 2D 物理碰撞层，金色为玩家占用</div>
+
+  <div class="wrap">
+    <!-- 场景树 -->
+    <div class="card">
+      <h2>场景树 SCENE TREE</h2>
+      <div class="tree">
+        <div class="node t-autoload"><span class="box">├─</span>autoloads · EventBus / UIRegistry / GameFlow / PauseManager …</div>
+        <div class="node t-boot"><span class="box">└─</span>Boot <span class="tag">main_scene</span></div>
+
+        <div class="node t-world" style="margin-left:18px"><span class="box">├─</span>World <span class="tag">Node2D</span> <span class="tag t-sub">换关只动它</span></div>
+        <div class="node t-world" style="margin-left:36px"><span class="box">└─</span>Level_xxx <span class="tag t-sub">当前关卡实例</span></div>
+
+        <div class="node t-player" style="margin-left:54px"><span class="box">├─</span>Player <span class="tag pill">CharacterBody2D · layer2</span></div>
+        <div class="node t-sub" style="margin-left:72px"><span class="box">├─</span>Hurtbox <span class="tag pill">Area2D · layer4</span></div>
+        <div class="node t-sub" style="margin-left:72px"><span class="box">├─</span>AttackBox <span class="tag pill">Area2D · layer6</span> <span class="tag t-sub">mask→layer5</span></div>
+        <div class="node t-sub" style="margin-left:72px"><span class="box">├─</span>Sprite / Combat / Camera2D …</div>
+
+        <div class="node t-sub" style="margin-left:54px"><span class="box">├─</span>Enemy <span class="tag t-sub">layer3/5/7</span></div>
+        <div class="node t-sub" style="margin-left:54px"><span class="box">├─</span>Floor / Walls <span class="tag t-sub">layer1</span></div>
+        <div class="node t-sub" style="margin-left:54px"><span class="box">└─</span>NPC / Chest <span class="tag t-sub">layer10</span></div>
+
+        <div class="node t-ui" style="margin-left:18px"><span class="box">├─</span>GUI <span class="tag pill2">CanvasLayer · layer10</span> <span class="tag t-sub">HUD / BossHealthBar</span></div>
+        <div class="node t-ui" style="margin-left:18px"><span class="box">└─</span>Menus <span class="tag pill2">CanvasLayer · layer30</span> <span class="tag t-sub">对话/暂停/背包…</span></div>
+      </div>
+      <div class="legend">★ <b>玩家是"世界物体"</b>：住在 World→关卡 里，随关卡换场重建；<br>不进 Boot 的常驻层（GUI/Menus），所以没自己的"玩家容器"。</div>
+    </div>
+
+    <!-- 碰撞层网格 -->
+    <div class="card">
+      <h2>碰撞层 COLLISION LAYERS (2D)</h2>
+      <div class="grid">
+        <div class="cell"><div class="n">layer 1</div><div class="nm">World</div><div class="who">地形 / 墙</div></div>
+        <div class="cell player"><div class="n">layer 2</div><div class="nm">PlayerBody</div><div class="who">▲ Player 本体</div></div>
+        <div class="cell"><div class="n">layer 3</div><div class="nm">EnemyBody</div><div class="who">敌人本体</div></div>
+        <div class="cell player"><div class="n">layer 4</div><div class="nm">PlayerHurtbox</div><div class="who">▲ Player.Hurtbox</div></div>
+        <div class="cell"><div class="n">layer 5</div><div class="nm">EnemyHurtbox</div><div class="who">← Player.AttackBox 命中</div></div>
+        <div class="cell player"><div class="n">layer 6</div><div class="nm">PlayerAttack</div><div class="who">▲ Player.AttackBox</div></div>
+        <div class="cell"><div class="n">layer 7</div><div class="nm">EnemyAttack</div><div class="who">敌人攻击</div></div>
+        <div class="cell"><div class="n">layer 8</div><div class="nm">Pickup</div><div class="who">掉落物</div></div>
+        <div class="cell"><div class="n">layer 9</div><div class="nm">Projectile</div><div class="who">弹幕</div></div>
+        <div class="cell"><div class="n">layer 10</div><div class="nm">Interactable</div><div class="who">可交互物</div></div>
+      </div>
+      <div class="legend">金色 = 玩家占用（来自 <code>player.tscn</code> 的 <code>collision_layer</code> 位掩码）<br>
+        layer2=2¹ · layer4=2³ · layer6=2⁵</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <b>结论</b>：场景树的 3 个容器是<b>「世界 vs 界面」</b>的架构分界（World / GUI / Menus），
+    玩家作为世界物体挂在 <code>World→关卡→Player</code> 之下，随关重建，无需独立容器；
+    而玩家的「独立身份」由<b>碰撞层 2 / 4 / 6</b> 定义（对应 PlayerBody / PlayerHurtbox / PlayerAttack）。
+    两套"层"各管一摊，互不等价。
+  </div>
+</body>
+</html>

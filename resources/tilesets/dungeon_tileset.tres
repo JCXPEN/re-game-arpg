@@ -1,0 +1,22 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/tilesets/TilesetInteriorFloor.png" id="1_pu1og"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lx72a"]
+texture = ExtResource("1_pu1og")
+1:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uxlma"]
+texture = ExtResource("1_pu1og")
+16:7/0 = 0
+16:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[resource]
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 0
+sources/0 = SubResource("TileSetAtlasSource_lx72a")
+sources/1 = SubResource("TileSetAtlasSource_uxlma")
+metadata/floor_source = 0
+metadata/wall_source = 1
+metadata/floor_coord = Vector2i(1, 1)
+metadata/wall_coord = Vector2i(16, 7)

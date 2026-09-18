@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="1_wpcxl"]
+
+[resource]
+script = ExtResource("1_wpcxl")
+startup = 0.5
+active = 0.05
+recovery = 0.6
+element = 1
+knockback = 80.0
+hitstop = 0.04
+hitbox_offset = Vector2(12, 0)
+hitbox_size = Vector2(14, 14)

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="SpellData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_t4tob"]
+[ext_resource type="Resource" path="res://data/attacks/fire_enchant.tres" id="2_e7ix8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/ScrollFire.png" id="3_xax3o"]
+[ext_resource type="Script" path="res://scripts/data/spell_data.gd" id="4_7vjkg"]
+
+[resource]
+script = ExtResource("4_7vjkg")
+display_name = "烈焰附魔"
+description = "为武器附上火元素，持续期间普攻附带火焰伤害。"
+icon = ExtResource("3_xax3o")
+form = 2
+mana_cost = 18.0
+cooldown = 8.0
+cast_time = 0.3
+enchant_attack = ExtResource("2_e7ix8")
+enchant_duration = 10.0
+cast_sfx = ExtResource("1_t4tob")

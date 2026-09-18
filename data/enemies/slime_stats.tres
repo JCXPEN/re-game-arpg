@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_ap5tx"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monsters/Slime.png" id="2_jg125"]
+
+[resource]
+script = ExtResource("1_ap5tx")
+display_name = "史莱姆"
+sprite_texture = ExtResource("2_jg125")
+body_radius = 5.0
+max_health = 30.0
+max_mana = 0.0
+attack_power = 6.0
+move_speed = 60.0
+mana_regen = 0.0
+hurt_time = 0.2
+invuln_time = 0.12

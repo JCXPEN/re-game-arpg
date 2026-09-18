@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://cyqrj0808oh6v"]
+
+[ext_resource type="Resource" uid="uid://dx8p5k1x5f07v" path="res://data/attacks/sword_combo_1.tres" id="1_icrv7"]
+[ext_resource type="Resource" uid="uid://cog2duyiw76k1" path="res://data/attacks/sword_heavy.tres" id="2_4i60u"]
+[ext_resource type="Texture2D" uid="uid://c5x2yyp1wtftw" path="res://assets/sprites/weapons/Sword/SpriteInHand.png" id="3_rj845"]
+[ext_resource type="AudioStream" uid="uid://c80o7664wxut6" path="res://assets/audio/sfx/Hit.wav" id="4_ph70c"]
+[ext_resource type="Texture2D" uid="uid://dmeh1osjws61s" path="res://assets/sprites/weapons/Sword/Sprite.png" id="5_8ki01"]
+[ext_resource type="Script" uid="uid://dk3lfcve25oys" path="res://scripts/data/weapon_data.gd" id="6_uyv5u"]
+[ext_resource type="AudioStream" uid="uid://cuyxr8vkx74qj" path="res://assets/audio/sfx/Hit1.wav" id="7_up4lq"]
+
+[resource]
+script = ExtResource("6_uyv5u")
+display_name = "铁剑"
+description = "均衡的单手剑，三段连击流畅。"
+icon = ExtResource("5_8ki01")
+held_texture = ExtResource("3_rj845")
+held_offset = Vector2(7, -2)
+combo_1 = ExtResource("1_icrv7")
+heavy_attack = ExtResource("2_4i60u")
+attack_bonus = 4.0
+attack_speed = 1.15
+swing_sfx = ExtResource("7_up4lq")
+hit_sfx = ExtResource("4_ph70c")

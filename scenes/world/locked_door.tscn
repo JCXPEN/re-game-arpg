@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/locked_door.gd" id="1_47gyr"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/TilesetRelief.png" id="2_ibtvd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qimdn"]
+size = Vector2(16, 16)
+
+[node name="LockedDoor" type="Node2D" unique_id=694624794]
+script = ExtResource("1_47gyr")
+blocker_path = NodePath("Blocker")
+sprite_path = NodePath("Sprite")
+
+[node name="Blocker" type="StaticBody2D" parent="." unique_id=1045242733]
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape2D" parent="Blocker" unique_id=1887234196]
+shape = SubResource("RectangleShape2D_qimdn")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=871901922]
+texture = ExtResource("2_ibtvd")
+region_enabled = true
+region_rect = Rect2(80, 96, 16, 16)

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_wowkd"]
+
+[resource]
+script = ExtResource("1_wowkd")
+order = 11
+title = "翻滚与无敌"
+text = "按 [空格] 翻滚。翻滚期间无敌，
+还能取消攻击后摇，是保命的关键。"
+level_id = &"field"
+auto_hide = 8.0
+pause_game = true

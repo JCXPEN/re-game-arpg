@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_inwbv"]
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="2_yqduu"]
+
+[resource]
+script = ExtResource("2_yqduu")
+display_name = "体魄"
+description = "最大生命 +15"
+weight = 20.0
+max_stacks = 5
+stat = 0
+value = 15.0
+pick_sfx = ExtResource("1_inwbv")

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="LevelData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/music/23 - Road.ogg" id="1_6njwh"]
+[ext_resource type="PackedScene" path="res://scenes/levels/field.tscn" id="2_030xv"]
+[ext_resource type="Script" path="res://scripts/data/level_data.gd" id="3_cr8tu"]
+
+[resource]
+script = ExtResource("3_cr8tu")
+id = &"field"
+display_name = "风鸣平原"
+scene = ExtResource("2_030xv")
+exits = Array[Dictionary]([{
+"entry_point_id": &"to_dungeon",
+"locked_until_cleared": false,
+"target_entry": &"from_field",
+"target_level": &"dungeon_1"
+}, {
+"entry_point_id": &"to_town",
+"locked_until_cleared": false,
+"target_entry": &"from_field",
+"target_level": &"town"
+}])
+default_entry = &"from_town"
+bgm = ExtResource("1_6njwh")
+ambient_color = Color(1, 0.97, 0.9, 1)
+camera_bounds = Rect2(0, 0, 800, 608)

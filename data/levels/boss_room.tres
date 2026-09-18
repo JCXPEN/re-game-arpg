@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="LevelData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/music/17 - Fight.ogg" id="1_jyiay"]
+[ext_resource type="PackedScene" path="res://scenes/levels/boss_room.tscn" id="2_pjouc"]
+[ext_resource type="Script" path="res://scripts/data/level_data.gd" id="3_u4as3"]
+
+[resource]
+script = ExtResource("3_u4as3")
+id = &"boss_room"
+display_name = "独眼巨人巢穴"
+scene = ExtResource("2_pjouc")
+area_type = "Boss"
+exits = Array[Dictionary]([{
+"entry_point_id": &"to_town",
+"locked_until_cleared": false,
+"target_entry": &"from_field",
+"target_level": &"town"
+}])
+default_entry = &"from_dungeon_2"
+is_boss_room = true
+boss_id = &"boss_cyclops"
+bgm = ExtResource("1_jyiay")
+ambient_color = Color(0.72, 0.6, 0.66, 1)
+camera_bounds = Rect2(0, 0, 512, 416)

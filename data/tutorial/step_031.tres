@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_klw5q"]
+
+[resource]
+script = ExtResource("1_klw5q")
+order = 31
+title = "Boss 就在前方"
+text = "门后的巢穴里是独眼巨人。
+它攻击范围大，注意观察前摇。"
+level_id = &"dungeon_2"
+auto_hide = 8.0
+pause_game = true

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Resource" path="res://data/attacks/sword_combo_3.tres" id="1_t8c1g"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Jump.wav" id="2_jb65n"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="3_47td4"]
+
+[resource]
+script = ExtResource("3_47td4")
+display_name = "冲刺斩"
+description = "向前突进并挥砍，突进期间无敌。"
+rarity = 1
+mana_cost = 12.0
+cooldown = 4.0
+attack_data = ExtResource("1_t8c1g")
+effect_value = 90.0
+cast_sfx = ExtResource("2_jb65n")

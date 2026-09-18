@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit3.wav" id="1_lahrm"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit2.wav" id="2_eaw88"]
+[ext_resource type="Resource" path="res://data/attacks/enemy_bite.tres" id="3_aou7i"]
+[ext_resource type="PackedScene" path="res://scenes/fx/enemy_projectile.tscn" id="4_ttn3t"]
+[ext_resource type="Resource" path="res://data/attacks/enemy_cast.tres" id="5_l7ggh"]
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="6_jjdjo"]
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="7_xy1ou"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/SorcererBlack.png" id="8_ehnj0"]
+[ext_resource type="Resource" path="res://data/weapons/wand.tres" id="9_eaw88"]
+[sub_resource type="Resource" id="Resource_aou7i"]
+script = ExtResource("7_xy1ou")
+display_name = "黑法师"
+sprite_texture = ExtResource("8_ehnj0")
+body_radius = 5.0
+max_health = 35.0
+max_mana = 0.0
+attack_power = 11.0
+defense = 2.0
+move_speed = 55.0
+mana_regen = 0.0
+hurt_time = 0.2
+invuln_time = 0.12
+
+[resource]
+script = ExtResource("6_jjdjo")
+display_name = "黑法师"
+stats = SubResource("Resource_aou7i")
+kind = 1
+detect_range = 160.0
+attack_cooldown = 2.0
+weapon = ExtResource("9_eaw88")
+melee_attack = ExtResource("3_aou7i")
+projectile_scene = ExtResource("4_ttn3t")
+ranged_attack = ExtResource("5_l7ggh")
+experience_reward = 18
+hurt_sfx = ExtResource("2_eaw88")
+attack_sfx = ExtResource("1_lahrm")

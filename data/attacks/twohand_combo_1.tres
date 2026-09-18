@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="1_i8snj"]
+
+[sub_resource type="Resource" id="Resource_i8snj"]
+script = ExtResource("1_i8snj")
+startup = 0.26
+active = 0.16
+recovery = 0.44
+damage = 20.0
+poise_damage = 35.0
+knockback = 380.0
+hitstop = 0.11
+self_motion = Vector2(50, 0)
+hitbox_offset = Vector2(26, 0)
+hitbox_size = Vector2(40, 34)
+
+[sub_resource type="Resource" id="Resource_82gjw"]
+script = ExtResource("1_i8snj")
+startup = 0.24
+active = 0.14
+recovery = 0.42
+damage = 16.0
+knockback = 340.0
+hitstop = 0.1
+hitbox_offset = Vector2(26, 0)
+hitbox_size = Vector2(38, 32)
+next_combo = SubResource("Resource_i8snj")
+roll_cancel_at = 0.12
+
+[resource]
+script = ExtResource("1_i8snj")
+startup = 0.22
+active = 0.13
+recovery = 0.4
+damage = 15.0
+knockback = 320.0
+hitstop = 0.1
+hitbox_offset = Vector2(24, 0)
+hitbox_size = Vector2(36, 30)
+next_combo = SubResource("Resource_82gjw")
+roll_cancel_at = 0.12

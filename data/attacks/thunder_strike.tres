@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://cmoc1swx8maai"]
+
+[ext_resource type="Script" uid="uid://i64v6h2tabqy" path="res://scripts/data/attack_data.gd" id="1_lbvad"]
+
+[resource]
+script = ExtResource("1_lbvad")
+startup = 0.3
+recovery = 0.4
+damage = 22.0
+attack_scaling = 1.4
+element = 3
+knockback = 160.0
+hitstop = 0.1
+shake = 8.0
+hitbox_offset = Vector2(0, 0)
+hitbox_size = Vector2(40, 40)

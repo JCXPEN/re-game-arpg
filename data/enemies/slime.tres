@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit3.wav" id="1_r0o31"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit2.wav" id="2_ekkkr"]
+[ext_resource type="Resource" path="res://data/attacks/enemy_bite.tres" id="3_pmp7f"]
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="4_mc08e"]
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="5_n6ilt"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monsters/Slime.png" id="6_3keqd"]
+[ext_resource type="Resource" path="res://data/weapons/sword.tres" id="7_ekkkr"]
+[sub_resource type="Resource" id="Resource_pmp7f"]
+script = ExtResource("5_n6ilt")
+display_name = "史莱姆"
+sprite_texture = ExtResource("6_3keqd")
+body_radius = 5.0
+max_health = 30.0
+max_mana = 0.0
+attack_power = 6.0
+move_speed = 60.0
+mana_regen = 0.0
+hurt_time = 0.2
+invuln_time = 0.12
+
+[resource]
+script = ExtResource("4_mc08e")
+display_name = "史莱姆"
+stats = SubResource("Resource_pmp7f")
+detect_range = 110.0
+attack_range = 18.0
+attack_cooldown = 1.3
+weapon = ExtResource("7_ekkkr")
+melee_attack = ExtResource("3_pmp7f")
+experience_reward = 8
+drop_table = Array[Dictionary]([{
+"chance": 0.6,
+"item_id": &"coin"
+}])
+hurt_sfx = ExtResource("2_ekkkr")
+attack_sfx = ExtResource("1_r0o31")

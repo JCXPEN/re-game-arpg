@@ -1,0 +1,86 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/tutorial_ui.gd" id="1_y4w3r"]
+[ext_resource type="Theme" path="res://resources/ui_theme.tres" id="2_l3xto"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/theme/gen/icon_close.png" id="3_esmlb"]
+
+[node name="TutorialUI" type="CanvasLayer" unique_id=1541659993]
+layer = 30
+script = ExtResource("1_y4w3r")
+panel_path = NodePath("Root/Panel")
+title_label_path = NodePath("Root/Panel/Margin/VBox/Header/Title")
+label_path = NodePath("Root/Panel/Margin/VBox/Body/Text")
+icon_path = NodePath("Root/Panel/Margin/VBox/Header/Icon")
+hint_path = NodePath("Root/Panel/Margin/VBox/Header/Hint")
+close_button_path = NodePath("Root/Panel/Margin/VBox/Header/Close")
+dismiss_area_path = NodePath("Root/Panel")
+
+[node name="Root" type="Control" parent="." unique_id=1380968554]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("2_l3xto")
+
+[node name="Panel" type="PanelContainer" parent="Root" unique_id=737993490]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -130.0
+offset_top = 12.0
+offset_right = -130.0
+offset_bottom = 12.0
+
+[node name="Margin" type="MarginContainer" parent="Root/Panel" unique_id=611039104]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="VBox" type="VBoxContainer" parent="Root/Panel/Margin" unique_id=376557450]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Header" type="HBoxContainer" parent="Root/Panel/Margin/VBox" unique_id=1184302274]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Icon" type="TextureRect" parent="Root/Panel/Margin/VBox/Header" unique_id=1420265912]
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="Root/Panel/Margin/VBox/Header" unique_id=266029430]
+visible = false
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeadingLabel"
+
+[node name="Hint" type="Label" parent="Root/Panel/Margin/VBox/Header" unique_id=1724119778]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HintLabel"
+text = "[F] 继续"
+
+[node name="Close" type="Button" parent="Root/Panel/Margin/VBox/Header" unique_id=682523682]
+custom_minimum_size = Vector2(20, 24)
+layout_mode = 2
+size_flags_horizontal = 8
+tooltip_text = "关闭教程"
+icon = ExtResource("3_esmlb")
+icon_alignment = 1
+
+[node name="Body" type="HBoxContainer" parent="Root/Panel/Margin/VBox" unique_id=1648167138]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Text" type="Label" parent="Root/Panel/Margin/VBox/Body" unique_id=391760459]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3

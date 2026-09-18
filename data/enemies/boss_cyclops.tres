@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit3.wav" id="1_h3hxb"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit2.wav" id="2_aftr6"]
+[ext_resource type="Resource" path="res://data/attacks/boss_slam.tres" id="3_vq038"]
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="4_d4j05"]
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="5_rrofb"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/Knight.png" id="6_tu3lf"]
+[ext_resource type="Resource" path="res://data/weapons/sword.tres" id="7_aftr6"]
+[sub_resource type="Resource" id="Resource_vq038"]
+script = ExtResource("5_rrofb")
+display_name = "独眼巨人"
+sprite_texture = ExtResource("6_tu3lf")
+body_radius = 5.0
+max_health = 420.0
+max_mana = 0.0
+attack_power = 20.0
+defense = 12.0
+move_speed = 62.0
+mana_regen = 0.0
+hurt_time = 0.2
+poise = 90.0
+invuln_time = 0.15
+knockback_resist = 1.0
+super_armor = true
+hurt_flash_color = Color(1, 0.6, 0.2, 1)
+hurt_shake_intensity = 0.0
+death_dissolve_time = 1.2
+
+[resource]
+script = ExtResource("4_d4j05")
+display_name = "独眼巨人"
+stats = SubResource("Resource_vq038")
+is_elite = true
+is_boss = true
+detect_range = 220.0
+attack_range = 34.0
+attack_cooldown = 1.8
+weapon = ExtResource("7_aftr6")
+melee_attack = ExtResource("3_vq038")
+experience_reward = 250
+drop_table = Array[Dictionary]([{
+"chance": 1.0,
+"item_id": &"coin"
+}])
+hurt_sfx = ExtResource("2_aftr6")
+attack_sfx = ExtResource("1_h3hxb")

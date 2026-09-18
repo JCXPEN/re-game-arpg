@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="1_he8nu"]
+
+[resource]
+script = ExtResource("1_he8nu")
+display_name = "坚韧"
+description = "最大生命 +20%。"
+is_active = false
+passive_stat_mods = {
+0: 0.2
+}
+passive_op = 1

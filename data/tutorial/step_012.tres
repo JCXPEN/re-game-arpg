@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_j7kwj"]
+
+[resource]
+script = ExtResource("1_j7kwj")
+order = 12
+title = "蓄力重击"
+text = "按住 [鼠标右键] 蓄力，松开释放重击。
+蓄满伤害和范围都最大。"
+level_id = &"field"
+auto_hide = 8.0
+pause_game = true

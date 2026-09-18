@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_iv8qd"]
+
+[resource]
+script = ExtResource("1_iv8qd")
+order = 13
+title = "打开宝箱"
+text = "主路之外的角落常有宝箱。
+靠近按 [F] 打开。"
+level_id = &"field"
+auto_hide = 6.0
+pause_game = true

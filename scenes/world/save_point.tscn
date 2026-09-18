@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/save_point.gd" id="1_j1jcv"]
+[ext_resource type="Texture2D" path="res://assets/fx/magic/CircleOrange.png" id="2_bhju2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gkk6c"]
+size = Vector2(24, 24)
+
+[node name="SavePoint" type="Area2D" unique_id=307967101]
+collision_layer = 512
+collision_mask = 2
+script = ExtResource("1_j1jcv")
+
+[node name="Shape" type="CollisionShape2D" parent="." unique_id=1296241145]
+shape = SubResource("RectangleShape2D_gkk6c")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=428844562]
+texture = ExtResource("2_bhju2")
+offset = Vector2(0, -6)
+hframes = 4

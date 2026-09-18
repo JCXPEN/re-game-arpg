@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_ci7jm"]
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="2_vgnu8"]
+
+[resource]
+script = ExtResource("2_vgnu8")
+display_name = "锐眼"
+description = "暴击率 +8%"
+rarity = 1
+weight = 9.0
+max_stacks = 5
+stat = 6
+value = 0.08
+pick_sfx = ExtResource("1_ci7jm")

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_mg8qh"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/SorcererBlack.png" id="2_dpg32"]
+
+[resource]
+script = ExtResource("1_mg8qh")
+display_name = "黑法师"
+sprite_texture = ExtResource("2_dpg32")
+body_radius = 5.0
+max_health = 35.0
+max_mana = 0.0
+attack_power = 11.0
+defense = 2.0
+move_speed = 55.0
+mana_regen = 0.0
+hurt_time = 0.2
+invuln_time = 0.12

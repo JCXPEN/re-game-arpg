@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_cb2rx"]
+
+[resource]
+script = ExtResource("1_cb2rx")
+order = 22
+title = "清空房间得强化"
+text = "清光一个房间的所有敌人后，
+会弹出三选一强化。选一个让自己变强。"
+level_id = &"dungeon_1"
+auto_hide = 8.0
+trigger_action = &"pick_modifier"
+# 要玩家在世界里清怪拿强化 → 不能冻结（三选一窗口自己也持冻结令牌）。
+pause_game = false

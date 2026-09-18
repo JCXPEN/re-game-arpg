@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Resource" path="res://data/attacks/twohand_combo_1.tres" id="1_e6e1s"]
+[ext_resource type="Resource" path="res://data/attacks/twohand_heavy.tres" id="2_efv2h"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/BigSword/SpriteInHand.png" id="3_mcnjj"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit.wav" id="4_g2a56"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/BigSword/Sprite.png" id="5_vfkuo"]
+[ext_resource type="Script" path="res://scripts/data/weapon_data.gd" id="6_lv1qv"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit1.wav" id="7_y3b3h"]
+[resource]
+script = ExtResource("6_lv1qv")
+display_name = "双手大剑"
+description = "攻击缓慢但范围与伤害极高，重击能打断敌人。"
+icon = ExtResource("5_vfkuo")
+held_texture = ExtResource("3_mcnjj")
+held_offset = Vector2(8, -4)
+kind = 2
+rarity = 1
+combo_1 = ExtResource("1_e6e1s")
+heavy_attack = ExtResource("2_efv2h")
+charge_time = 0.85
+charge_move_mult = 0.2
+attack_bonus = 12.0
+attack_speed = 0.8
+swing_sfx = ExtResource("7_y3b3h")
+hit_sfx = ExtResource("4_g2a56")

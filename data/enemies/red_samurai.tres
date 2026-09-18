@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit3.wav" id="1_so6ga"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit2.wav" id="2_yx30b"]
+[ext_resource type="Resource" path="res://data/attacks/enemy_charge.tres" id="3_ultwu"]
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="4_didka"]
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="5_xfson"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/RedSamurai.png" id="6_dlc6b"]
+[ext_resource type="Resource" path="res://data/weapons/sword.tres" id="7_yx30b"]
+[sub_resource type="Resource" id="Resource_ultwu"]
+script = ExtResource("5_xfson")
+display_name = "赤武士"
+sprite_texture = ExtResource("6_dlc6b")
+body_radius = 5.0
+max_health = 90.0
+max_mana = 0.0
+attack_power = 14.0
+defense = 6.0
+move_speed = 78.0
+mana_regen = 0.0
+hurt_time = 0.2
+poise = 30.0
+invuln_time = 0.12
+knockback_resist = 0.5
+knockback_damping = 18.0
+hurt_shake_intensity = 3.0
+
+[resource]
+script = ExtResource("4_didka")
+display_name = "赤武士"
+stats = SubResource("Resource_ultwu")
+kind = 2
+is_elite = true
+detect_range = 170.0
+attack_range = 30.0
+attack_cooldown = 2.4
+charge_speed_mult = 4.5
+weapon = ExtResource("7_yx30b")
+melee_attack = ExtResource("3_ultwu")
+experience_reward = 40
+drop_table = Array[Dictionary]([{
+"chance": 1.0,
+"item_id": &"coin"
+}])
+hurt_sfx = ExtResource("2_yx30b")
+attack_sfx = ExtResource("1_so6ga")

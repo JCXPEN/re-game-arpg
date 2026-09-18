@@ -1,0 +1,23 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/chest.gd" id="1_chest"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/ChestSmall.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_reach"]
+size = Vector2(22, 22)
+
+[node name="Chest" type="Area2D"]
+collision_layer = 512
+collision_mask = 2
+script = ExtResource("1_chest")
+blocker_path = NodePath("")
+sprite_path = NodePath("Sprite")
+
+[node name="Shape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_reach")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+hframes = 2
+frame = 0
+offset = Vector2(0, -4)

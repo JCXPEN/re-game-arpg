@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/items/Coin.png" id="1_nd8hd"]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="2_tigur"]
+
+[resource]
+script = ExtResource("2_tigur")
+id = &"coin"
+display_name = "金币"
+description = "通用货币。"
+icon = ExtResource("1_nd8hd")
+kind = 1
+max_stack = 999

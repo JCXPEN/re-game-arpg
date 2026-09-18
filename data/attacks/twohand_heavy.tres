@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="1_ji6mb"]
+
+[resource]
+script = ExtResource("1_ji6mb")
+startup = 0.42
+active = 0.18
+recovery = 0.6
+damage = 40.0
+poise_damage = 60.0
+knockback = 560.0
+hitstop = 0.2
+shake = 10.0
+self_motion = Vector2(60, 0)
+hitbox_offset = Vector2(30, 0)
+hitbox_size = Vector2(48, 42)

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_daoen"]
+
+[resource]
+script = ExtResource("1_daoen")
+order = 21
+title = "远程敌人"
+text = "法师会保持距离放火球。
+用翻滚接近，或用远程手段反制。"
+level_id = &"dungeon_1"
+auto_hide = 8.0
+pause_game = true

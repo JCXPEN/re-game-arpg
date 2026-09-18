@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="1_ttw5q"]
+
+[resource]
+script = ExtResource("1_ttw5q")
+display_name = "嗜血狂怒"
+description = "生命低于 40% 时攻击力 +40%"
+rarity = 2
+weight = 4.0
+target = 3
+op = 1
+value = 0.4
+trigger_tag = &"low_health"

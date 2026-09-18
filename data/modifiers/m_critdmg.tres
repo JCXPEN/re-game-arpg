@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_wvmvv"]
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="2_t5u05"]
+
+[resource]
+script = ExtResource("2_t5u05")
+display_name = "致命一击"
+description = "暴击伤害 +25%"
+rarity = 1
+weight = 8.0
+max_stacks = 4
+stat = 7
+value = 0.25
+pick_sfx = ExtResource("1_wvmvv")

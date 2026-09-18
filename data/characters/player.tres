@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3 uid="uid://dlvqaexcltmwy"]
+
+[ext_resource type="Script" uid="uid://c53r8se0edqsn" path="res://scripts/data/character_data.gd" id="1_x567r"]
+[ext_resource type="Texture2D" uid="uid://d10tuh61yo57d" path="res://assets/sprites/characters/BlueNinja.png" id="2_btt0u"]
+
+[resource]
+script = ExtResource("1_x567r")
+display_name = "勇者"
+sprite_texture = ExtResource("2_btt0u")
+body_radius = 5.0
+max_mana = 60.0
+defense = 5.0
+move_speed = 115.0
+mana_regen = 4.0
+crit_chance = 0.08
+crit_damage = 1.6
+hurt_time = 0.16
+poise = 20.0
+invuln_time = 0.5
+hurt_flash_color = Color(1, 0.3, 0.3, 1)
+hurt_flash_time = 0.1
+death_dissolve_time = 0.7

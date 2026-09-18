@@ -1,0 +1,93 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://resources/ui_theme.tres" id="1_m1kxf"]
+[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="2_x2yvf"]
+[ext_resource type="PackedScene" path="res://scenes/ui/help_panel.tscn" id="3_uhagc"]
+[ext_resource type="PackedScene" path="res://scenes/ui/settings_panel.tscn" id="4_btxxm"]
+
+[node name="MainMenu" type="Control" unique_id=566215694]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_m1kxf")
+script = ExtResource("2_x2yvf")
+help_panel_scene = ExtResource("3_uhagc")
+settings_panel_scene = ExtResource("4_btxxm")
+
+[node name="Background" type="ColorRect" parent="." unique_id=336420923]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.055, 0.055, 0.078, 1)
+
+[node name="Title" type="Label" parent="." unique_id=19771168]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -60.0
+offset_top = 14.0
+offset_right = -60.0
+offset_bottom = 14.0
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
+text = "ActRPG"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="." unique_id=74087714]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 42.0
+offset_right = -100.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 8
+theme_override_colors/font_color = Color(0.7, 0.7, 0.75, 1)
+text = "2D 俯视动作 ARPG 原型"
+horizontal_alignment = 1
+
+[node name="Menu" type="VBoxContainer" parent="." unique_id=1494712968]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -18.0
+offset_right = -40.0
+offset_bottom = -18.0
+theme_override_constants/separation = 3
+
+[node name="btn_new_game" type="Button" parent="Menu" unique_id=473345569]
+custom_minimum_size = Vector2(80, 13)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "新的冒险"
+
+[node name="btn_continue" type="Button" parent="Menu" unique_id=263778860]
+custom_minimum_size = Vector2(80, 13)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "继续游戏"
+
+[node name="btn_help" type="Button" parent="Menu" unique_id=1030662932]
+custom_minimum_size = Vector2(80, 13)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "操作说明"
+
+[node name="btn_settings" type="Button" parent="Menu" unique_id=448659496]
+custom_minimum_size = Vector2(80, 13)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "设置"
+
+[node name="btn_quit" type="Button" parent="Menu" unique_id=1232340732]
+custom_minimum_size = Vector2(80, 13)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "退出"

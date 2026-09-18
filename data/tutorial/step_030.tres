@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_05xbn"]
+
+[resource]
+script = ExtResource("1_05xbn")
+order = 30
+title = "精英敌人"
+text = "赤武士会蓄力冲锋，冲锋前有停顿。
+看准时机翻滚躲开，再反击。"
+level_id = &"dungeon_2"
+delay = 1.0
+auto_hide = 8.0
+pause_game = true

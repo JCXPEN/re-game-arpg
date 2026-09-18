@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://bj3w4ikyih7s7"]
+
+[ext_resource type="Resource" uid="uid://datasmowmu0w" path="res://data/attacks/fireball.tres" id="1_ag3yy"]
+[ext_resource type="AudioStream" uid="uid://cbrgesjpnncw" path="res://assets/audio/sfx/Fireball.wav" id="2_pdlt8"]
+[ext_resource type="Texture2D" uid="uid://s1ihyvyy15hi" path="res://assets/sprites/items/ScrollFire.png" id="3_nqnep"]
+[ext_resource type="AudioStream" uid="uid://bhwfae0tfci2o" path="res://assets/audio/sfx/Explosion2.wav" id="4_08d2k"]
+[ext_resource type="PackedScene" path="res://scenes/fx/projectile.tscn" id="5_acxtn"]
+[ext_resource type="Script" uid="uid://dtvw8r15hnbju" path="res://scripts/data/spell_data.gd" id="6_qkf3u"]
+
+[resource]
+script = ExtResource("6_qkf3u")
+display_name = "火球术"
+description = "向瞄准方向发射一枚火球，命中后爆炸。"
+icon = ExtResource("3_nqnep")
+mana_cost = 14.0
+cooldown = 1.1
+cast_time = 0.18
+recovery = 0.22
+attack_data = ExtResource("1_ag3yy")
+projectile_scene = ExtResource("5_acxtn")
+cast_sfx = ExtResource("2_pdlt8")
+impact_sfx = ExtResource("4_08d2k")

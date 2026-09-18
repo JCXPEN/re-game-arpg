@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_l3ur2"]
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="2_5xc11"]
+
+[resource]
+script = ExtResource("2_5xc11")
+display_name = "疾风连击"
+description = "攻击速度 +20%"
+rarity = 2
+weight = 3.5
+max_stacks = 3
+stat = 5
+op = 1
+value = 0.2
+pick_sfx = ExtResource("1_l3ur2")

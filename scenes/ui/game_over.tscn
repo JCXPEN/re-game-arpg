@@ -1,0 +1,79 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/game_over_ui.gd" id="1_x6o8e"]
+[ext_resource type="PackedScene" path="res://scenes/ui/main_menu.tscn" id="2_vfrx6"]
+[ext_resource type="Theme" path="res://resources/ui_theme.tres" id="3_o6b8n"]
+
+[node name="GameOverUI" type="CanvasLayer" unique_id=286143570]
+layer = 55
+script = ExtResource("1_x6o8e")
+title_path = NodePath("Root/Title")
+body_path = NodePath("Root/Body")
+main_menu_scene = ExtResource("2_vfrx6")
+
+[node name="Root" type="Control" parent="." unique_id=1710428892]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("3_o6b8n")
+
+[node name="Dimmer" type="ColorRect" parent="Root" unique_id=2012804102]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.65)
+
+[node name="Title" type="Label" parent="Root" unique_id=1280902812]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -50.0
+offset_right = -80.0
+offset_bottom = -50.0
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+
+[node name="Body" type="Label" parent="Root" unique_id=2085415623]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -22.0
+offset_right = -90.0
+offset_bottom = -22.0
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="Buttons" type="VBoxContainer" parent="Root" unique_id=1174990911]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = 20.0
+offset_right = -40.0
+offset_bottom = 20.0
+theme_override_constants/separation = 3
+
+[node name="btn_respawn" type="Button" parent="Root/Buttons" unique_id=550807672]
+custom_minimum_size = Vector2(80, 13)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "从存档点复活"
+
+[node name="btn_main_menu" type="Button" parent="Root/Buttons" unique_id=1600684586]
+custom_minimum_size = Vector2(80, 13)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "返回主菜单"

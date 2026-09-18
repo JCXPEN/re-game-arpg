@@ -1,0 +1,87 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/enemy_base.gd" id="1_enemy"]
+[ext_resource type="Script" path="res://scripts/player/actor_sprite.gd" id="2_sprite"]
+[ext_resource type="Script" path="res://scripts/combat/attack_controller.gd" id="3_atkctl"]
+[ext_resource type="Script" path="res://scripts/combat/attack_box.gd" id="4_atkbox"]
+[ext_resource type="Shader" path="res://shaders/hit_flash.gdshader" id="5_flash"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 5.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hurt"]
+radius = 6.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_atk"]
+size = Vector2(30, 26)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_flash"]
+resource_local_to_scene = true
+shader = ExtResource("5_flash")
+shader_parameter/flash_amount = 0.0
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/dissolve_amount = 0.0
+shader_parameter/dissolve_edge_color = Color(1, 0.55, 0.15, 1)
+shader_parameter/dissolve_edge_width = 0.08
+shader_parameter/outline_amount = 0.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+
+[node name="Enemy" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 1
+motion_mode = 1
+script = ExtResource("1_enemy")
+sprite_path = NodePath("Sprite")
+hurtbox_path = NodePath("Hurtbox")
+flash_material = SubResource("ShaderMaterial_flash")
+auto_create_collision = false
+attack_controller_path = NodePath("AttackController")
+health_bar_path = NodePath("HealthBar")
+weapon_parent_path = NodePath("WeaponMount")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_flash")
+offset = Vector2(0, -6)
+hframes = 4
+vframes = 7
+script = ExtResource("2_sprite")
+
+[node name="WeaponMount" type="Node2D" parent="."]
+position = Vector2(0, -6)
+
+[node name="BodyShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_body")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+monitorable = true
+monitoring = false
+
+[node name="Shape" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("CircleShape2D_hurt")
+
+[node name="AttackBox" type="Area2D" parent="."]
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+script = ExtResource("4_atkbox")
+attacker = NodePath("..")
+
+[node name="Shape" type="CollisionShape2D" parent="AttackBox"]
+position = Vector2(20, 0)
+shape = SubResource("RectangleShape2D_atk")
+
+[node name="AttackController" type="Node" parent="."]
+script = ExtResource("3_atkctl")
+attack_box_path = NodePath("../AttackBox")
+attack_shape_path = NodePath("../AttackBox/Shape")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = -10.0
+offset_top = -18.0
+offset_right = 10.0
+offset_bottom = -15.0
+max_value = 100.0
+value = 100.0
+show_percentage = false

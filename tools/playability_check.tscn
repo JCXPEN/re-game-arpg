@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/playability_check.gd" id="1_play"]
+
+[node name="PlayabilityCheck" type="Node"]
+script = ExtResource("1_play")

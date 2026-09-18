@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_rpe6j"]
+
+[resource]
+script = ExtResource("1_rpe6j")
+title = "欢迎来到边境小镇"
+text = "用 WASD / 方向键移动。
+先在小镇里走走，熟悉一下操作。"
+level_id = &"town"
+delay = 1.0
+auto_hide = 6.0
+pause_game = true

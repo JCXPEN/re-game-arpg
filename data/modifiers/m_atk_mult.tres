@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_giai8"]
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="2_6edo1"]
+
+[resource]
+script = ExtResource("2_6edo1")
+display_name = "战神之力"
+description = "攻击力 ×1.2"
+rarity = 2
+weight = 3.5
+max_stacks = 2
+op = 2
+value = 1.2
+pick_sfx = ExtResource("1_giai8")

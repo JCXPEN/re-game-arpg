@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Success1.wav" id="1_wyx72"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="2_38y7e"]
+
+[resource]
+script = ExtResource("2_38y7e")
+display_name = "治愈之光"
+description = "立即恢复 30% 最大生命。"
+rarity = 1
+mana_cost = 25.0
+cooldown = 12.0
+cast_time = 0.5
+effect_value = 0.3
+cast_sfx = ExtResource("1_wyx72")

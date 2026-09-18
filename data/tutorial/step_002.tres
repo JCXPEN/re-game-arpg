@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_a47u8"]
+
+[resource]
+script = ExtResource("1_a47u8")
+order = 2
+title = "前往野外"
+text = "小镇右侧的出口通往风鸣平原。
+走过去会自动切换场景。"
+level_id = &"town"
+auto_hide = 6.0
+pause_game = true

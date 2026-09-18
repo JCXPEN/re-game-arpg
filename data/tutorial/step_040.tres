@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_ryvko"]
+
+[resource]
+script = ExtResource("1_ryvko")
+order = 40
+title = "最终决战"
+text = "独眼巨人的重砸会造成大范围伤害。
+看到它抬手就翻滚拉开距离，攻击间隙再上前。"
+level_id = &"boss_room"
+delay = 1.2
+auto_hide = 9.0
+pause_game = true

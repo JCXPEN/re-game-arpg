@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_f7wq4"]
+
+[resource]
+script = ExtResource("1_f7wq4")
+order = 23
+title = "存档点"
+text = "地牢里有存档点（发光的法阵）。
+交互后回满状态并记录复活点，死亡不用从头再来。"
+level_id = &"dungeon_1"
+auto_hide = 8.0
+pause_game = true

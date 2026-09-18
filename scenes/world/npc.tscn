@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/npc.gd" id="1_ts6vr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/Villager.png" id="2_davfq"]
+[ext_resource type="Script" path="res://scripts/player/actor_sprite.gd" id="3_jcdfm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hxqfp"]
+size = Vector2(24, 24)
+
+[node name="NPC" type="Area2D" unique_id=1577081460]
+collision_layer = 512
+collision_mask = 2
+script = ExtResource("1_ts6vr")
+lines = PackedStringArray("你好，旅行者。")
+
+[node name="Shape" type="CollisionShape2D" parent="." unique_id=351680927]
+shape = SubResource("RectangleShape2D_hxqfp")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1200739237]
+texture = ExtResource("2_davfq")
+offset = Vector2(0, -6)
+hframes = 4
+vframes = 7
+script = ExtResource("3_jcdfm")

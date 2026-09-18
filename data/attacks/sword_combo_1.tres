@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://dx8p5k1x5f07v"]
+
+[ext_resource type="Script" uid="uid://i64v6h2tabqy" path="res://scripts/data/attack_data.gd" id="1_mqmei"]
+
+[sub_resource type="Resource" id="Resource_mqmei"]
+script = ExtResource("1_mqmei")
+startup = 0.14
+recovery = 0.24
+damage = 14.0
+knockback = 300.0
+hitstop = 0.09
+self_motion = Vector2(40, 0)
+hitbox_offset = Vector2(22, 0)
+hitbox_size = Vector2(30, 26)
+roll_cancel_at = 0.05
+
+[sub_resource type="Resource" id="Resource_1aux2"]
+script = ExtResource("1_mqmei")
+recovery = 0.24
+hitbox_offset = Vector2(22, 0)
+hitbox_size = Vector2(26, 22)
+next_combo = SubResource("Resource_mqmei")
+roll_cancel_at = 0.06
+
+[resource]
+script = ExtResource("1_mqmei")
+startup = 0.1
+active = 0.09
+recovery = 0.2
+damage = 9.0
+knockback = 200.0
+hitstop = 0.05
+hitbox_size = Vector2(24, 20)
+next_combo = SubResource("Resource_1aux2")
+roll_cancel_at = 0.06

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="1_4m5ri"]
+
+[resource]
+script = ExtResource("1_4m5ri")
+startup = 0.14
+recovery = 0.24
+damage = 14.0
+knockback = 300.0
+hitstop = 0.09
+self_motion = Vector2(40, 0)
+hitbox_offset = Vector2(22, 0)
+hitbox_size = Vector2(30, 26)
+roll_cancel_at = 0.05

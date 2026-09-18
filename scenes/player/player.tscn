@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://c8i1whjrhdna8"]
+
+[ext_resource type="Script" uid="uid://dpcdhr7cfxonn" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="Resource" uid="uid://dlvqaexcltmwy" path="res://data/characters/player.tres" id="2_data"]
+[ext_resource type="Script" uid="uid://cu2nffxollfj6" path="res://scripts/player/actor_sprite.gd" id="3_sprite"]
+[ext_resource type="Script" uid="uid://ujl1j75bi0xq" path="res://scripts/combat/attack_controller.gd" id="4_atkctl"]
+[ext_resource type="Script" uid="uid://bln168sg0hr5h" path="res://scripts/combat/attack_box.gd" id="5_atkbox"]
+[ext_resource type="Script" uid="uid://c8nkruxm4m0yn" path="res://scripts/player/player_combat.gd" id="6_combat"]
+[ext_resource type="Script" uid="uid://cfcnr8m1v5cmf" path="res://scripts/player/player_camera.gd" id="7_cam"]
+[ext_resource type="Shader" uid="uid://x4yexu1vlmq" path="res://shaders/hit_flash.gdshader" id="8_flash"]
+[ext_resource type="Resource" uid="uid://cyqrj0808oh6v" path="res://data/weapons/sword.tres" id="9_weapon"]
+[ext_resource type="Resource" uid="uid://bj3w4ikyih7s7" path="res://data/spells/fireball.tres" id="10_spell1"]
+[ext_resource type="Script" uid="uid://dtvw8r15hnbju" path="res://scripts/data/spell_data.gd" id="10_ugbui"]
+[ext_resource type="Resource" uid="uid://dw37x8nhqtim" path="res://data/spells/ice_spike.tres" id="11_spell2"]
+[ext_resource type="Resource" uid="uid://blt66x30m1xc7" path="res://data/spells/thunder.tres" id="12_spell3"]
+[ext_resource type="Texture2D" uid="uid://d10tuh61yo57d" path="res://assets/sprites/characters/BlueNinja.png" id="13_tex"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_flash"]
+resource_local_to_scene = true
+shader = ExtResource("8_flash")
+shader_parameter/flash_amount = 0.0
+shader_parameter/flash_color = Color(1, 0.25, 0.25, 1)
+shader_parameter/dissolve_amount = 0.0
+shader_parameter/dissolve_edge_color = Color(1, 0.55, 0.15, 1)
+shader_parameter/dissolve_edge_width = 0.08
+shader_parameter/outline_amount = 0.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 5.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hurt"]
+radius = 6.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_atk"]
+size = Vector2(34, 28)
+
+[node name="Player" type="CharacterBody2D" unique_id=483971884]
+collision_layer = 2
+motion_mode = 1
+script = ExtResource("1_player")
+attack_controller_path = NodePath("AttackController")
+combat_path = NodePath("Combat")
+camera_path = NodePath("Camera2D")
+data = ExtResource("2_data")
+sprite_path = NodePath("Sprite")
+hurtbox_path = NodePath("Hurtbox")
+flash_material = SubResource("ShaderMaterial_flash")
+auto_create_collision = false
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1459979719]
+material = SubResource("ShaderMaterial_flash")
+texture = ExtResource("13_tex")
+offset = Vector2(0, -6)
+hframes = 4
+vframes = 7
+script = ExtResource("3_sprite")
+
+[node name="WeaponMount" type="Node2D" parent="." unique_id=1875857433]
+position = Vector2(0, -6)
+
+[node name="BodyShape" type="CollisionShape2D" parent="." unique_id=1457175519]
+shape = SubResource("CircleShape2D_body")
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1414033342]
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+
+[node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=217805497]
+shape = SubResource("CircleShape2D_hurt")
+
+[node name="AttackBox" type="Area2D" parent="." unique_id=785931268]
+collision_layer = 32
+collision_mask = 16
+monitoring = false
+script = ExtResource("5_atkbox")
+attacker = NodePath("..")
+
+[node name="Shape" type="CollisionShape2D" parent="AttackBox" unique_id=1566871002]
+position = Vector2(22, 0)
+shape = SubResource("RectangleShape2D_atk")
+
+[node name="AttackController" type="Node" parent="." unique_id=1486973148]
+script = ExtResource("4_atkctl")
+attack_box_path = NodePath("../AttackBox")
+attack_shape_path = NodePath("../AttackBox/Shape")
+
+[node name="Combat" type="Node" parent="." unique_id=321808904]
+script = ExtResource("6_combat")
+attack_controller_path = NodePath("../AttackController")
+weapon_parent_path = NodePath("../WeaponMount")
+current_weapon = ExtResource("9_weapon")
+spell_slots = Array[ExtResource("10_ugbui")]([ExtResource("10_spell1"), ExtResource("11_spell2"), ExtResource("12_spell3")])
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=632476159]
+script = ExtResource("7_cam")
+target_path = NodePath("..")

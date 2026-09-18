@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://dprsiwl4c30hd"]
+
+[ext_resource type="Script" uid="uid://bod5qa01tv83y" path="res://scripts/ui/dialog_ui.gd" id="1_dialog"]
+[ext_resource type="Theme" path="res://resources/ui_theme.tres" id="2_theme"]
+
+[node name="DialogUI" type="CanvasLayer" unique_id=64184905]
+process_mode = 3
+layer = 35
+script = ExtResource("1_dialog")
+notice_panel_path = NodePath("Root/Notice")
+notice_text_path = NodePath("Root/Notice/NoticeText")
+bar_panel_path = NodePath("Root/Bar")
+vbox_path = NodePath("Root/Bar/VBox")
+header_path = NodePath("Root/Bar/VBox/Header")
+speaker_path = NodePath("Root/Bar/VBox/Header/Speaker")
+text_path = NodePath("Root/Bar/VBox/Text")
+action_button_path = NodePath("Root/Bar/VBox/Header/Action")
+avatar_path = NodePath("Root/Bar/VBox/Header/Avatar")
+portrait_path = NodePath("Root/Portrait")
+
+[node name="Root" type="Control" parent="." unique_id=1815894963]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_theme")
+
+[node name="Notice" type="PanelContainer" parent="Root" unique_id=207026159]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -74.0
+offset_top = 24.0
+offset_right = 74.0
+offset_bottom = 24.0
+grow_horizontal = 2
+theme_type_variation = &"DialogNoticePanel"
+
+[node name="NoticeText" type="Label" parent="Root/Notice" unique_id=1707507251]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="Bar" type="PanelContainer" parent="Root" unique_id=764415654]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -88.0
+offset_top = -22.0
+offset_right = 88.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_type_variation = &"DialogPanel"
+
+[node name="VBox" type="VBoxContainer" parent="Root/Bar" unique_id=1148362294]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Header" type="HBoxContainer" parent="Root/Bar/VBox" unique_id=472189922]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Avatar" type="TextureRect" parent="Root/Bar/VBox/Header" unique_id=658295998]
+visible = false
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Speaker" type="Label" parent="Root/Bar/VBox/Header" unique_id=1138701662]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"DialogSpeakerLabel"
+
+[node name="Action" type="Button" parent="Root/Bar/VBox/Header" unique_id=1237736406]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+tooltip_text = "点击推进（也可按 F / Enter）"
+focus_mode = 0
+theme_type_variation = &"DialogActionButton"
+text = "继续"
+
+[node name="Text" type="Label" parent="Root/Bar/VBox" unique_id=1028833646]
+layout_mode = 2
+theme_type_variation = &"DialogBodyLabel"
+autowrap_mode = 3
+
+[node name="Portrait" type="TextureRect" parent="Root" unique_id=433037226]
+visible = false
+layout_mode = 0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 4

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_nevw2"]
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="2_lbupw"]
+
+[resource]
+script = ExtResource("2_lbupw")
+display_name = "冥想"
+description = "每秒回蓝 +2"
+weight = 14.0
+max_stacks = 4
+stat = 9
+value = 2.0
+pick_sfx = ExtResource("1_nevw2")

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://datasmowmu0w"]
+
+[ext_resource type="Script" uid="uid://i64v6h2tabqy" path="res://scripts/data/attack_data.gd" id="1_20wg8"]
+
+[resource]
+script = ExtResource("1_20wg8")
+startup = 0.18
+active = 0.12
+recovery = 0.3
+damage = 18.0
+attack_scaling = 1.2
+element = 1
+knockback = 140.0
+hitstop = 0.07
+hitbox_size = Vector2(26, 26)

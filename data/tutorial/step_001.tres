@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_40vy3"]
+
+[resource]
+script = ExtResource("1_40vy3")
+order = 1
+title = "与 NPC 交谈"
+text = "靠近村民按 [F] 交谈。
+他们会给你提示和道具。"
+level_id = &"town"
+auto_hide = 8.0
+# 这一步要求玩家**在世界里做事**（走近村民按 F）——绝不能冻结世界，
+# 否则 Area2D 收不到玩家、对话永远弹不出来。完成条件是"真的说了话"（TutorialSystem 监听 dialog_opened）。
+trigger_action = &"talk"
+pause_game = false

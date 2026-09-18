@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_3c1tm"]
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="2_b32j7"]
+
+[resource]
+script = ExtResource("2_b32j7")
+display_name = "护甲"
+description = "防御 +4"
+weight = 18.0
+max_stacks = 5
+stat = 3
+value = 4.0
+pick_sfx = ExtResource("1_3c1tm")

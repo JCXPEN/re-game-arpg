@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_rwhaq"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/Skeleton.png" id="2_bokes"]
+
+[resource]
+script = ExtResource("1_rwhaq")
+display_name = "骷髅兵"
+sprite_texture = ExtResource("2_bokes")
+body_radius = 5.0
+max_health = 45.0
+max_mana = 0.0
+attack_power = 9.0
+defense = 3.0
+move_speed = 72.0
+mana_regen = 0.0
+hurt_time = 0.2
+invuln_time = 0.12

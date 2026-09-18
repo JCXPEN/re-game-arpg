@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://cog2duyiw76k1"]
+
+[ext_resource type="Script" uid="uid://i64v6h2tabqy" path="res://scripts/data/attack_data.gd" id="1_35hkq"]
+
+[resource]
+script = ExtResource("1_35hkq")
+startup = 0.3
+active = 0.14
+recovery = 0.42
+damage = 26.0
+poise_damage = 40.0
+knockback = 420.0
+hitstop = 0.14
+shake = 7.0
+self_motion = Vector2(70, 0)
+hitbox_offset = Vector2(26, 0)
+hitbox_size = Vector2(38, 34)

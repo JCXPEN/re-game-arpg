@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AttackData" format=3 uid="uid://fv6tltvojyo3"]
+
+[ext_resource type="Script" uid="uid://i64v6h2tabqy" path="res://scripts/data/attack_data.gd" id="1_okwls"]
+
+[resource]
+script = ExtResource("1_okwls")
+startup = 0.16
+recovery = 0.28
+damage = 14.0
+element = 2
+knockback = 110.0
+hitbox_size = Vector2(24, 24)

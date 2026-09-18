@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AbilityData" format=3]
+
+[ext_resource type="Resource" path="res://data/attacks/twohand_combo_2.tres" id="1_x351q"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Magic2.wav" id="2_5cx25"]
+[ext_resource type="Script" path="res://scripts/data/ability_data.gd" id="3_ieg6v"]
+
+[resource]
+script = ExtResource("3_ieg6v")
+display_name = "旋风斩"
+description = "原地旋转，对周围所有敌人造成伤害。"
+rarity = 2
+mana_cost = 20.0
+cooldown = 6.0
+attack_data = ExtResource("1_x351q")
+cast_sfx = ExtResource("2_5cx25")

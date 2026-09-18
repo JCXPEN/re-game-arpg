@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/items/Key.png" id="1_bdil7"]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="2_f2f4t"]
+
+[resource]
+script = ExtResource("2_f2f4t")
+id = &"dungeon_key"
+display_name = "地牢钥匙"
+description = "打开地牢深处的关底门。"
+icon = ExtResource("1_bdil7")
+kind = 3
+max_stack = 1
+can_drop = false

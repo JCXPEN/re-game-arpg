@@ -1,0 +1,86 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/inventory_ui.gd" id="1_4ycse"]
+[ext_resource type="Theme" path="res://resources/ui_theme.tres" id="2_drsq2"]
+
+[node name="InventoryUI" type="CanvasLayer" unique_id=1350527407]
+layer = 40
+script = ExtResource("1_4ycse")
+panel_path = NodePath("Root/Panel")
+grid_path = NodePath("Root/Panel/Margin/VBox/Grid")
+weapon_icon_path = NodePath("Root/Panel/Margin/VBox/EquipRow/WeaponIcon")
+gold_label_path = NodePath("Root/Panel/Margin/VBox/Gold")
+
+[node name="Root" type="Control" parent="." unique_id=988407971]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("2_drsq2")
+
+[node name="Dimmer" type="ColorRect" parent="Root" unique_id=2118062301]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.65)
+
+[node name="Panel" type="PanelContainer" parent="Root" unique_id=850646546]
+custom_minimum_size = Vector2(220, 140)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -110.0
+offset_top = -70.0
+offset_right = -110.0
+offset_bottom = -70.0
+
+[node name="Margin" type="MarginContainer" parent="Root/Panel" unique_id=2068479581]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="VBox" type="VBoxContainer" parent="Root/Panel/Margin" unique_id=1809506718]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="Root/Panel/Margin/VBox" unique_id=1399025116]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "背包与装备"
+horizontal_alignment = 1
+
+[node name="EquipRow" type="HBoxContainer" parent="Root/Panel/Margin/VBox" unique_id=1709916543]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="@Label@23" type="Label" parent="Root/Panel/Margin/VBox/EquipRow" unique_id=1677568969]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "武器："
+
+[node name="WeaponIcon" type="TextureRect" parent="Root/Panel/Margin/VBox/EquipRow" unique_id=745862686]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="Gold" type="Label" parent="Root/Panel/Margin/VBox" unique_id=1773199458]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "金币：0"
+
+[node name="Grid" type="GridContainer" parent="Root/Panel/Margin/VBox" unique_id=196041920]
+layout_mode = 2
+theme_override_constants/h_separation = 3
+theme_override_constants/v_separation = 3
+columns = 6
+
+[node name="Hint" type="Label" parent="Root/Panel/Margin/VBox" unique_id=1192688952]
+layout_mode = 2
+theme_override_font_sizes/font_size = 6
+theme_override_colors/font_color = Color(0.65, 0.65, 0.7, 1)
+text = "点击消耗品使用　·　Tab/I 关闭"

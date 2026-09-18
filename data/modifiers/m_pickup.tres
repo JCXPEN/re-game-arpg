@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_iqrcl"]
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="2_1qtt2"]
+
+[resource]
+script = ExtResource("2_1qtt2")
+display_name = "贪婪之手"
+description = "拾取范围 +30"
+rarity = 2
+weight = 3.0
+max_stacks = 2
+stat = 11
+value = 30.0
+pick_sfx = ExtResource("1_iqrcl")

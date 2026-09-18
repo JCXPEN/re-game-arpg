@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="1_0mka2"]
+
+[resource]
+script = ExtResource("1_0mka2")
+display_name = "巨力"
+description = "双手武器伤害 +25%"
+rarity = 1
+weight = 8.0
+target = 1
+op = 1
+value = 0.25
+weapon_kinds = Array[int]([2])

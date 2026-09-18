@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="LevelData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/music/21 - Dungeon.ogg" id="1_mswjt"]
+[ext_resource type="PackedScene" path="res://scenes/levels/dungeon_2.tscn" id="2_r50kb"]
+[ext_resource type="Script" path="res://scripts/data/level_data.gd" id="3_jpkof"]
+
+[resource]
+script = ExtResource("3_jpkof")
+id = &"dungeon_2"
+display_name = "古代地牢 · 二层"
+scene = ExtResource("2_r50kb")
+area_type = "Dungeon"
+exits = Array[Dictionary]([{
+"entry_point_id": &"to_dungeon_1",
+"locked_until_cleared": false,
+"target_entry": &"from_field",
+"target_level": &"dungeon_1"
+}, {
+"entry_point_id": &"to_boss",
+"locked_until_cleared": true,
+"target_entry": &"from_dungeon_2",
+"target_level": &"boss_room"
+}])
+default_entry = &"from_dungeon_1"
+bgm = ExtResource("1_mswjt")
+ambient_color = Color(0.62, 0.66, 0.78, 1)
+camera_bounds = Rect2(0, 0, 992, 736)

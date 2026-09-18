@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_755rj"]
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="2_cjjr3"]
+
+[resource]
+script = ExtResource("2_cjjr3")
+display_name = "锋锐"
+description = "攻击力 +3"
+weight = 20.0
+max_stacks = 5
+value = 3.0
+pick_sfx = ExtResource("1_755rj")

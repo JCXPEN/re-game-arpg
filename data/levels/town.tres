@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="LevelData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/music/1 - Adventure Begin.ogg" id="1_wlpih"]
+[ext_resource type="PackedScene" path="res://scenes/levels/town.tscn" id="2_q6pga"]
+[ext_resource type="Script" path="res://scripts/data/level_data.gd" id="3_si6b3"]
+
+[resource]
+script = ExtResource("3_si6b3")
+id = &"town"
+display_name = "边境小镇"
+scene = ExtResource("2_q6pga")
+area_type = "Town"
+exits = Array[Dictionary]([{
+"entry_point_id": &"to_field",
+"locked_until_cleared": false,
+"target_entry": &"from_town",
+"target_level": &"field"
+}])
+bgm = ExtResource("1_wlpih")
+camera_bounds = Rect2(0, 0, 640, 480)

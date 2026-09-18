@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Resource" path="res://data/attacks/sword_combo_1.tres" id="1_ude2q"]
+[ext_resource type="Resource" path="res://data/attacks/sword_heavy.tres" id="2_ouvoy"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/Katana/SpriteInHand.png" id="3_teqty"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit.wav" id="4_fyqp0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/Katana/Sprite.png" id="5_8ebvw"]
+[ext_resource type="Script" path="res://scripts/data/weapon_data.gd" id="6_haouq"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit1.wav" id="7_2xl5i"]
+[resource]
+script = ExtResource("6_haouq")
+display_name = "疾风刀"
+description = "攻速更快的武士刀，牺牲单次伤害换取连击速度。"
+icon = ExtResource("5_8ebvw")
+held_texture = ExtResource("3_teqty")
+held_offset = Vector2(7, -3)
+rarity = 1
+combo_1 = ExtResource("1_ude2q")
+heavy_attack = ExtResource("2_ouvoy")
+attack_bonus = 6.0
+attack_speed = 1.45
+swing_sfx = ExtResource("7_2xl5i")
+hit_sfx = ExtResource("4_fyqp0")

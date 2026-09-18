@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="1_mgtpu"]
+
+[resource]
+script = ExtResource("1_mgtpu")
+startup = 0.35
+recovery = 0.45
+damage = 8.0
+knockback = 160.0
+hitstop = 0.04
+hitbox_offset = Vector2(16, 0)
+hitbox_size = Vector2(20, 18)

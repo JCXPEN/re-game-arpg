@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_ridco"]
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="2_xgs48"]
+
+[resource]
+script = ExtResource("2_xgs48")
+display_name = "轻足"
+description = "移动速度 +8"
+weight = 20.0
+max_stacks = 4
+stat = 4
+value = 8.0
+pick_sfx = ExtResource("1_ridco")

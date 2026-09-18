@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/ui_layout_probe.gd" id="1_probe"]
+
+[node name="UILayoutProbe" type="Node"]
+script = ExtResource("1_probe")

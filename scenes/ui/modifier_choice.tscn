@@ -1,0 +1,52 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/modifier_choice_ui.gd" id="1_4t2k5"]
+[ext_resource type="Theme" path="res://resources/ui_theme.tres" id="2_ojwqe"]
+
+[node name="ModifierChoice" type="CanvasLayer" unique_id=1723898094]
+layer = 50
+script = ExtResource("1_4t2k5")
+card_container_path = NodePath("Root/Cards")
+dimmer_path = NodePath("Root/Dimmer")
+
+[node name="Root" type="Control" parent="." unique_id=1029604333]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("2_ojwqe")
+
+[node name="Dimmer" type="ColorRect" parent="Root" unique_id=1861535451]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.65)
+
+[node name="Title" type="Label" parent="Root" unique_id=1025525785]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -80.0
+offset_top = 16.0
+offset_right = -80.0
+offset_bottom = 16.0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(1, 0.95, 0.75, 1)
+text = "选择你的强化"
+horizontal_alignment = 1
+
+[node name="Cards" type="HBoxContainer" parent="Root" unique_id=1094963249]
+custom_minimum_size = Vector2(270, 70)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -135.0
+offset_top = -35.0
+offset_right = -135.0
+offset_bottom = -35.0
+theme_override_constants/separation = 8
+alignment = 1

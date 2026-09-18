@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_bk1xy"]
+
+[resource]
+script = ExtResource("1_bk1xy")
+order = 20
+title = "法术与技能"
+text = "[Q]/[E]/[R] 释放三个法术，[1]/[2] 释放技能。
+法术消耗 MP，注意蓝量。"
+level_id = &"dungeon_1"
+delay = 1.2
+auto_hide = 8.0
+pause_game = true

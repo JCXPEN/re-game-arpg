@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_xef0y"]
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="2_26plw"]
+
+[resource]
+script = ExtResource("2_26plw")
+display_name = "狂暴"
+description = "攻击力 +15%"
+rarity = 1
+max_stacks = 4
+op = 1
+value = 0.15
+pick_sfx = ExtResource("1_xef0y")

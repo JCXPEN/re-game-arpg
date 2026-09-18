@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_v63wn"]
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="2_ebxr3"]
+
+[resource]
+script = ExtResource("2_ebxr3")
+display_name = "巨人血脉"
+description = "最大生命 +18%"
+rarity = 1
+weight = 9.0
+max_stacks = 4
+stat = 0
+op = 1
+value = 0.18
+pick_sfx = ExtResource("1_v63wn")

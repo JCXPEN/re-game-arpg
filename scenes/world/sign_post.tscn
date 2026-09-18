@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/sign_post.gd" id="1_k5qgt"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/ScrollFire.png" id="2_6ows2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8liku"]
+size = Vector2(24, 24)
+
+[node name="SignPost" type="Area2D" unique_id=1397766885]
+collision_layer = 512
+collision_mask = 2
+script = ExtResource("1_k5qgt")
+
+[node name="Shape" type="CollisionShape2D" parent="." unique_id=259299150]
+shape = SubResource("RectangleShape2D_8liku")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=60748954]
+texture = ExtResource("2_6ows2")
+offset = Vector2(0, -6)

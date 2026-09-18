@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Resource" path="res://data/attacks/twohand_combo_1.tres" id="1_qxt78"]
+[ext_resource type="Resource" path="res://data/attacks/twohand_heavy.tres" id="2_mqtwe"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/Hammer/SpriteInHand.png" id="3_4shh5"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit.wav" id="4_njt2d"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/Hammer/Sprite.png" id="5_r10d3"]
+[ext_resource type="Script" path="res://scripts/data/weapon_data.gd" id="6_gj6mi"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit1.wav" id="7_u0g74"]
+[resource]
+script = ExtResource("6_gj6mi")
+display_name = "碎地巨锤"
+description = "最重的武器，蓄满重击可造成大范围击退。"
+icon = ExtResource("5_r10d3")
+held_texture = ExtResource("3_4shh5")
+held_offset = Vector2(8, -5)
+kind = 2
+rarity = 2
+combo_1 = ExtResource("1_qxt78")
+heavy_attack = ExtResource("2_mqtwe")
+charge_time = 1.0
+charge_move_mult = 0.1
+attack_bonus = 16.0
+attack_speed = 0.65
+swing_sfx = ExtResource("7_u0g74")
+hit_sfx = ExtResource("4_njt2d")

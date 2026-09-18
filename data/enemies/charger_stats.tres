@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_2b2e4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/RedSamurai.png" id="2_03j6y"]
+
+[resource]
+script = ExtResource("1_2b2e4")
+display_name = "赤武士"
+sprite_texture = ExtResource("2_03j6y")
+body_radius = 5.0
+max_health = 90.0
+max_mana = 0.0
+attack_power = 14.0
+defense = 6.0
+move_speed = 78.0
+mana_regen = 0.0
+hurt_time = 0.2
+poise = 30.0
+invuln_time = 0.12
+knockback_resist = 0.5
+knockback_damping = 18.0
+hurt_shake_intensity = 3.0

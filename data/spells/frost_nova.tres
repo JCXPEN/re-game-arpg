@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="SpellData" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/fx/area_spell.tscn" id="1_1je5o"]
+[ext_resource type="Resource" path="res://data/attacks/ice_spike.tres" id="2_02he7"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Magic2.wav" id="3_3hexy"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/ScrollIce.png" id="4_cfrh7"]
+[ext_resource type="Script" path="res://scripts/data/spell_data.gd" id="5_prckb"]
+
+[resource]
+script = ExtResource("5_prckb")
+display_name = "寒霜新星"
+description = "以自身为中心爆发冰环，击退并冻伤周围敌人。"
+icon = ExtResource("4_cfrh7")
+element = 2
+form = 1
+mana_cost = 20.0
+cooldown = 3.0
+cast_time = 0.25
+attack_data = ExtResource("2_02he7")
+area_scene = ExtResource("1_1je5o")
+cast_sfx = ExtResource("3_3hexy")

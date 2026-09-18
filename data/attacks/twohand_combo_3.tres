@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="1_twmdi"]
+
+[resource]
+script = ExtResource("1_twmdi")
+startup = 0.26
+active = 0.16
+recovery = 0.44
+damage = 20.0
+poise_damage = 35.0
+knockback = 380.0
+hitstop = 0.11
+self_motion = Vector2(50, 0)
+hitbox_offset = Vector2(26, 0)
+hitbox_size = Vector2(40, 34)

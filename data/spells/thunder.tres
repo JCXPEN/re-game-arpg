@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://blt66x30m1xc7"]
+
+[ext_resource type="PackedScene" path="res://scenes/fx/area_spell.tscn" id="1_vvrbl"]
+[ext_resource type="Resource" uid="uid://cmoc1swx8maai" path="res://data/attacks/thunder_strike.tres" id="2_d2hmy"]
+[ext_resource type="AudioStream" uid="uid://dbt1cnykt4cq3" path="res://assets/audio/sfx/Magic3.wav" id="3_0ofuy"]
+[ext_resource type="Texture2D" uid="uid://ddnxlsdy2mj2o" path="res://assets/sprites/items/ScrollThunder.png" id="4_j66in"]
+[ext_resource type="AudioStream" uid="uid://c73m4ql3mhjkm" path="res://assets/audio/sfx/Explosion.wav" id="5_el0ww"]
+[ext_resource type="Script" uid="uid://dtvw8r15hnbju" path="res://scripts/data/spell_data.gd" id="6_aqjgb"]
+
+[resource]
+script = ExtResource("6_aqjgb")
+display_name = "落雷"
+description = "在目标位置降下落雷，范围伤害。"
+icon = ExtResource("4_j66in")
+element = 3
+form = 1
+mana_cost = 22.0
+cooldown = 2.4
+cast_time = 0.4
+cast_move_mult = 0.15
+attack_data = ExtResource("2_d2hmy")
+area_scene = ExtResource("1_vvrbl")
+cast_sfx = ExtResource("3_0ofuy")
+impact_sfx = ExtResource("5_el0ww")

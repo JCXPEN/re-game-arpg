@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ModifierData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/PowerUp1.wav" id="1_b6jnq"]
+[ext_resource type="Script" path="res://scripts/data/modifier_data.gd" id="2_5wv3p"]
+
+[resource]
+script = ExtResource("2_5wv3p")
+display_name = "灵泉"
+description = "最大法力 +12"
+weight = 18.0
+max_stacks = 4
+stat = 1
+value = 12.0
+pick_sfx = ExtResource("1_b6jnq")

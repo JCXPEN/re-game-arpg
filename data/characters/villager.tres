@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_kpkua"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/Villager.png" id="2_fvxkg"]
+
+[resource]
+script = ExtResource("1_kpkua")
+display_name = "村民"
+sprite_texture = ExtResource("2_fvxkg")
+body_radius = 5.0
+max_health = 30.0
+move_speed = 40.0

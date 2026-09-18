@@ -1,0 +1,182 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/settings_panel.gd" id="1_qm286"]
+[ext_resource type="Theme" path="res://resources/ui_theme.tres" id="2_i3lpr"]
+
+[node name="SettingsPanel" type="CanvasLayer" unique_id=815855413]
+layer = 60
+script = ExtResource("1_qm286")
+panel_path = NodePath("Root/Panel")
+master_slider_path = NodePath("Root/Panel/Margin/VBox/MasterRow/Master")
+sfx_slider_path = NodePath("Root/Panel/Margin/VBox/SfxRow/Sfx")
+music_slider_path = NodePath("Root/Panel/Margin/VBox/MusicRow/Music")
+close_button_path = NodePath("Root/Panel/Margin/VBox/Actions/btn_confirm")
+back_button_path = NodePath("Root/Panel/Margin/VBox/Actions/btn_back")
+fullscreen_path = NodePath("Root/Panel/Margin/VBox/FullscreenRow/Fullscreen")
+
+[node name="Root" type="Control" parent="." unique_id=444752831]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("2_i3lpr")
+
+[node name="Dimmer" type="ColorRect" parent="Root" unique_id=1628479249]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.65)
+
+[node name="Panel" type="PanelContainer" parent="Root" unique_id=2127100]
+custom_minimum_size = Vector2(208, 0)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="Root/Panel" unique_id=1833492685]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="VBox" type="VBoxContainer" parent="Root/Panel/Margin" unique_id=150491863]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Title" type="Label" parent="Root/Panel/Margin/VBox" unique_id=1864058207]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.9098039, 0.6392157, 0.23921569, 1)
+text = "设置"
+horizontal_alignment = 1
+
+[node name="MasterRow" type="HBoxContainer" parent="Root/Panel/Margin/VBox" unique_id=1187262359]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="Root/Panel/Margin/VBox/MasterRow" unique_id=1694695769]
+custom_minimum_size = Vector2(46, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "主音量"
+vertical_alignment = 1
+
+[node name="Master" type="HSlider" parent="Root/Panel/Margin/VBox/MasterRow" unique_id=1886198389]
+custom_minimum_size = Vector2(72, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="Value" type="Label" parent="Root/Panel/Margin/VBox/MasterRow" unique_id=1009261980]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9098039, 0.6392157, 0.23921569, 1)
+text = "100%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="SfxRow" type="HBoxContainer" parent="Root/Panel/Margin/VBox" unique_id=397503411]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="Root/Panel/Margin/VBox/SfxRow" unique_id=913936391]
+custom_minimum_size = Vector2(46, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "音效"
+vertical_alignment = 1
+
+[node name="Sfx" type="HSlider" parent="Root/Panel/Margin/VBox/SfxRow" unique_id=31239405]
+custom_minimum_size = Vector2(72, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="Value" type="Label" parent="Root/Panel/Margin/VBox/SfxRow" unique_id=154207376]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9098039, 0.6392157, 0.23921569, 1)
+text = "100%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="MusicRow" type="HBoxContainer" parent="Root/Panel/Margin/VBox" unique_id=1477020497]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="Root/Panel/Margin/VBox/MusicRow" unique_id=1242901476]
+custom_minimum_size = Vector2(46, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "音乐"
+vertical_alignment = 1
+
+[node name="Music" type="HSlider" parent="Root/Panel/Margin/VBox/MusicRow" unique_id=1625970545]
+custom_minimum_size = Vector2(72, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="Value" type="Label" parent="Root/Panel/Margin/VBox/MusicRow" unique_id=1816250409]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.9098039, 0.6392157, 0.23921569, 1)
+text = "100%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Sep" type="HSeparator" parent="Root/Panel/Margin/VBox" unique_id=293926090]
+layout_mode = 2
+
+[node name="FullscreenRow" type="HBoxContainer" parent="Root/Panel/Margin/VBox" unique_id=636265368]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="Root/Panel/Margin/VBox/FullscreenRow" unique_id=525739397]
+custom_minimum_size = Vector2(46, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "全屏"
+vertical_alignment = 1
+
+[node name="Fullscreen" type="CheckButton" parent="Root/Panel/Margin/VBox/FullscreenRow" unique_id=586552710]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Actions" type="HBoxContainer" parent="Root/Panel/Margin/VBox" unique_id=1461030706]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="btn_back" type="Button" parent="Root/Panel/Margin/VBox/Actions" unique_id=309269434]
+custom_minimum_size = Vector2(72, 22)
+layout_mode = 2
+theme_type_variation = &"QuietButton"
+text = "返回"
+
+[node name="btn_confirm" type="Button" parent="Root/Panel/Margin/VBox/Actions" unique_id=2107450556]
+custom_minimum_size = Vector2(72, 22)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "确定"

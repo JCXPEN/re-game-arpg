@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Resource" path="res://data/attacks/bow_shot.tres" id="1_2hkv3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/Bow/SpriteInHand.png" id="2_fxw16"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit.wav" id="3_gm5bu"]
+[ext_resource type="Texture2D" path="res://assets/sprites/weapons/Bow/Sprite.png" id="4_vk2m4"]
+[ext_resource type="PackedScene" path="res://scenes/fx/projectile.tscn" id="5_du8kl"]
+[ext_resource type="Script" path="res://scripts/data/weapon_data.gd" id="6_luy5p"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit1.wav" id="7_gypkq"]
+[resource]
+script = ExtResource("6_luy5p")
+display_name = "猎手短弓"
+description = "远程点射，适合风筝打法。"
+icon = ExtResource("4_vk2m4")
+held_texture = ExtResource("2_fxw16")
+kind = 1
+combo_1 = ExtResource("1_2hkv3")
+projectile_scene = ExtResource("5_du8kl")
+projectile_cooldown = 0.34
+attack_bonus = 5.0
+swing_sfx = ExtResource("7_gypkq")
+hit_sfx = ExtResource("3_gm5bu")
+rotate_to_aim = false
+hitbox_offset = Vector2(10, 0)
+hitbox_size = Vector2(14, 14)

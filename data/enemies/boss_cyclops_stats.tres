@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_6gvi0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/Knight.png" id="2_uwjju"]
+
+[resource]
+script = ExtResource("1_6gvi0")
+display_name = "独眼巨人"
+sprite_texture = ExtResource("2_uwjju")
+body_radius = 5.0
+max_health = 420.0
+max_mana = 0.0
+attack_power = 20.0
+defense = 12.0
+move_speed = 62.0
+mana_regen = 0.0
+hurt_time = 0.2
+poise = 90.0
+invuln_time = 0.15
+knockback_resist = 1.0
+super_armor = true
+hurt_flash_color = Color(1, 0.6, 0.2, 1)
+hurt_shake_intensity = 0.0
+death_dissolve_time = 1.2

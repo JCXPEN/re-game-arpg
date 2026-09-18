@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit3.wav" id="1_s7qy5"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/Hit2.wav" id="2_2765a"]
+[ext_resource type="Resource" path="res://data/attacks/enemy_bite.tres" id="3_wix1q"]
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="4_7swr6"]
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="5_f6q1b"]
+[ext_resource type="Texture2D" path="res://assets/sprites/characters/Skeleton.png" id="6_br6mt"]
+[ext_resource type="Resource" path="res://data/weapons/sword.tres" id="7_2765a"]
+[sub_resource type="Resource" id="Resource_wix1q"]
+script = ExtResource("5_f6q1b")
+display_name = "骷髅兵"
+sprite_texture = ExtResource("6_br6mt")
+body_radius = 5.0
+max_health = 45.0
+max_mana = 0.0
+attack_power = 9.0
+defense = 3.0
+move_speed = 72.0
+mana_regen = 0.0
+hurt_time = 0.2
+invuln_time = 0.12
+
+[resource]
+script = ExtResource("4_7swr6")
+display_name = "骷髅兵"
+stats = SubResource("Resource_wix1q")
+detect_range = 130.0
+attack_range = 20.0
+attack_cooldown = 1.1
+weapon = ExtResource("7_2765a")
+melee_attack = ExtResource("3_wix1q")
+experience_reward = 12
+hurt_sfx = ExtResource("2_2765a")
+attack_sfx = ExtResource("1_s7qy5")

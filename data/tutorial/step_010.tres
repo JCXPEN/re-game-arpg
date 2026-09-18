@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TutorialStep" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/tutorial_step.gd" id="1_7rl7o"]
+
+[resource]
+script = ExtResource("1_7rl7o")
+order = 10
+title = "战斗：普攻"
+text = "靠近敌人，用 [鼠标左键] 或 [J] 攻击。
+连按可以打出三段连击。"
+level_id = &"field"
+delay = 1.2
+auto_hide = 8.0
+trigger_action = &"attack"
+# 要玩家在世界里攻击 → 不能冻结（见 TutorialSystem._step_wants_freeze 的护栏）。
+pause_game = false

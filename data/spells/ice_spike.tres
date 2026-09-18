@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://dw37x8nhqtim"]
+
+[ext_resource type="Resource" uid="uid://fv6tltvojyo3" path="res://data/attacks/ice_spike.tres" id="1_5iicv"]
+[ext_resource type="AudioStream" uid="uid://4ui7q4xnws0h" path="res://assets/audio/sfx/Magic1.wav" id="2_qhegd"]
+[ext_resource type="Texture2D" uid="uid://cf0h6s74irgsm" path="res://assets/sprites/items/ScrollIce.png" id="3_ad2hc"]
+[ext_resource type="PackedScene" path="res://scenes/fx/projectile.tscn" id="4_or2l0"]
+[ext_resource type="Script" uid="uid://dtvw8r15hnbju" path="res://scripts/data/spell_data.gd" id="5_70lci"]
+
+[resource]
+script = ExtResource("5_70lci")
+display_name = "冰锥术"
+description = "射出锋利的冰锥，命中造成减速。"
+icon = ExtResource("3_ad2hc")
+element = 2
+mana_cost = 10.0
+cooldown = 0.8
+cast_time = 0.12
+attack_data = ExtResource("1_5iicv")
+projectile_scene = ExtResource("4_or2l0")
+cast_sfx = ExtResource("2_qhegd")

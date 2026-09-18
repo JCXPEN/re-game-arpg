@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tools/generate_ui_skin.gd" id="1_skin"]
+
+[node name="GenerateUISkin" type="Node"]
+script = ExtResource("1_skin")

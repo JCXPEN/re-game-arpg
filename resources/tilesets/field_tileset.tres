@@ -1,0 +1,23 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/tilesets/TilesetFloor.png" id="1_53k8d"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/TilesetRelief.png" id="2_1etbt"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3ko31"]
+texture = ExtResource("1_53k8d")
+4:12/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wyba8"]
+texture = ExtResource("2_1etbt")
+5:6/0 = 0
+5:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[resource]
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 0
+sources/0 = SubResource("TileSetAtlasSource_3ko31")
+sources/1 = SubResource("TileSetAtlasSource_wyba8")
+metadata/floor_source = 0
+metadata/wall_source = 1
+metadata/floor_coord = Vector2i(4, 12)
+metadata/wall_coord = Vector2i(5, 6)

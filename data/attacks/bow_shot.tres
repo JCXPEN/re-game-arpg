@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AttackData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/attack_data.gd" id="1_n6rr1"]
+
+[resource]
+script = ExtResource("1_n6rr1")
+startup = 0.1
+active = 0.05
+damage = 9.0
+attack_scaling = 0.8
+knockback = 90.0
+hitstop = 0.03
+hitbox_offset = Vector2(14, 0)
+hitbox_size = Vector2(16, 14)

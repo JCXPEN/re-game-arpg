@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>re-game-arpg 架构说明文档</title>
+<style>
+  :root {
+    --bg: #f7f8fa; --panel: #ffffff; --fg: #1f2430; --muted: #5b6472;
+    --accent: #c8742a; --accent2: #6b8cce; --border: #e3e6ec; --code-bg: #f0f2f5;
+    --table-head: #eef1f6; --link: #2563eb; --sidebar-bg: #fbfcfe;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161c; --panel: #1c1f27; --fg: #e6e9ef; --muted: #9aa3b2;
+      --accent: #e0975a; --accent2: #8aa9e6; --border: #2c313c; --code-bg: #20242d;
+      --table-head: #232732; --link: #7aa2ff; --sidebar-bg: #181b22;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    background: var(--bg); color: var(--fg); line-height: 1.7; font-size: 15px;
+  }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .layout { display: flex; min-height: 100vh; }
+  nav {
+    width: 280px; flex: 0 0 280px; background: var(--sidebar-bg);
+    border-right: 1px solid var(--border); padding: 22px 16px; position: sticky;
+    top: 0; align-self: flex-start; height: 100vh; overflow-y: auto;
+  }
+  nav .brand { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+  nav .brand small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  nav ul { list-style: none; padding-left: 0; margin: 14px 0 0; }
+  nav > ul > li { margin: 2px 0; }
+  nav ul ul { padding-left: 14px; border-left: 1px solid var(--border); margin-left: 6px; }
+  nav a { color: var(--muted); display: block; padding: 4px 8px; border-radius: 6px; font-size: 13.5px; }
+  nav a:hover { background: var(--code-bg); color: var(--fg); text-decoration: none; }
+  main { flex: 1 1 auto; max-width: 920px; padding: 40px 48px 80px; margin: 0 auto; }
+  h1 { font-size: 30px; margin: 0 0 6px; line-height: 1.25; }
+  main > p:first-of-type { color: var(--muted); }
+  h2 { font-size: 23px; margin: 42px 0 12px; padding-bottom: 8px;
+       border-bottom: 2px solid var(--accent); }
+  h3 { font-size: 18px; margin: 28px 0 8px; color: var(--accent2); }
+  h4 { font-size: 15px; margin: 18px 0 6px; }
+  p { margin: 10px 0; }
+  code { background: var(--code-bg); padding: 1px 6px; border-radius: 4px;
+         font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 13px; }
+  pre { background: var(--code-bg); padding: 16px; border-radius: 8px; overflow-x: auto;
+        border: 1px solid var(--border); }
+  pre code { background: none; padding: 0; font-size: 13px; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 14px; }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+  thead th { background: var(--table-head); font-weight: 600; }
+  tbody tr:nth-child(even) { background: rgba(128,128,128,0.06); }
+  blockquote { border-left: 4px solid var(--accent); margin: 14px 0; padding: 4px 16px;
+               color: var(--muted); background: var(--code-bg); border-radius: 0 8px 8px 0; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+  ul, ol { padding-left: 24px; }
+  li { margin: 4px 0; }
+  .menu-toggle { display: none; }
+  @media (max-width: 860px) {
+    nav { position: fixed; left: 0; top: 0; z-index: 50; transform: translateX(-100%);
+          transition: transform .2s; box-shadow: 2px 0 12px rgba(0,0,0,.2); }
+    nav.open { transform: translateX(0); }
+    main { padding: 70px 18px 60px; }
+    .menu-toggle { display: block; position: fixed; top: 12px; left: 12px; z-index: 60;
+      background: var(--accent); color: #fff; border: none; border-radius: 8px;
+      padding: 8px 12px; font-size: 14px; cursor: pointer; }
+  }
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('open')">☰ 目录</button>
+<div class="layout">
+<nav>
+  <div class="brand">re-game-arpg<small>架构说明文档 · Godot 4.7.2</small></div>
+  <ul>
+<li><a href="#re-game-arpg">re-game-arpg 架构说明文档</a><ul>
+<li><a href="#_1">目录</a></li>
+<li><a href="#1">1. 项目概览</a></li>
+<li><a href="#2">2. 技术栈与工程配置</a><ul>
+<li><a href="#inputmap">输入映射（InputMap）</a></li>
+<li><a href="#projectgodot-layer_names">碰撞层约定（project.godot 的 [layer_names]）</a></li>
+</ul></li>
+<li><a href="#3">3. 目录结构总览</a></li>
+<li><a href="#4">4. 运行时架构与启动流程</a><ul>
+<li><a href="#41-autoload">4.1 Autoload 初始化顺序</a></li>
+<li><a href="#42">4.2 启动流程图</a></li>
+<li><a href="#43">4.3 关卡流转</a></li>
+</ul></li>
+<li><a href="#5-autoload">5. 核心系统（Autoload 单例）</a><ul>
+<li><a href="#51-eventbus">5.1 EventBus —— 通信中枢</a></li>
+<li><a href="#52-dataregistry">5.2 DataRegistry —— 数据注册中心</a></li>
+<li><a href="#53-gamestate">5.3 GameState —— 运行状态与存档</a></li>
+<li><a href="#54-scenedirector">5.4 SceneDirector —— 场景切换服务</a></li>
+<li><a href="#55-tutorialsystem">5.5 TutorialSystem —— 新手教程</a></li>
+<li><a href="#56-hitstop">5.6 HitStop —— 命中顿帧</a></li>
+<li><a href="#57-audiomanager">5.7 AudioManager —— 音频服务</a></li>
+<li><a href="#58-popupmanager">5.8 PopupManager —— 弹窗互斥调度</a></li>
+</ul></li>
+<li><a href="#6">6. 数据层</a></li>
+<li><a href="#7">7. 战斗系统</a><ul>
+<li><a href="#71-actor">7.1 Actor —— 有血条单位的基类</a></li>
+<li><a href="#72-player">7.2 Player —— 玩家角色</a></li>
+<li><a href="#73-attackcontroller">7.3 AttackController —— 攻击时间轴</a></li>
+<li><a href="#74-weaponcontroller">7.4 WeaponController —— 武器解耦</a></li>
+<li><a href="#75">7.5 其余战斗组件</a></li>
+</ul></li>
+<li><a href="#8">8. 世界与可交互物</a><ul>
+<li><a href="#81-levelruntime">8.1 LevelRuntime —— 关卡运行时</a></li>
+<li><a href="#82-interactable">8.2 可交互物（Interactable 体系）</a></li>
+</ul></li>
+<li><a href="#9-ui">9. UI 系统</a><ul>
+<li><a href="#91">9.1 总原则（来自踩坑固化）</a></li>
+<li><a href="#92-popupmanager">9.2 统一关闭契约（PopupManager 驱动）</a></li>
+<li><a href="#93-dialog_uigd">9.3 对话框两条通道（dialog_ui.gd）</a></li>
+<li><a href="#94-tutorial_uigd-help_panelgd">9.4 教程/系统弹窗（tutorial_ui.gd + help_panel.gd）</a></li>
+<li><a href="#95-4">9.5 系统级弹窗冻结游戏（需求 §4）</a></li>
+<li><a href="#96">9.6 菜单体系</a></li>
+<li><a href="#97-theme">9.7 皮肤与 Theme</a></li>
+</ul></li>
+<li><a href="#10-roguelite">10. Roguelite 词条系统</a></li>
+<li><a href="#11">11. 特效系统</a></li>
+<li><a href="#12-tools">12. 构建与资源管线（tools/ 生成器）</a></li>
+<li><a href="#13">13. 项目约定速查</a></li>
+<li><a href="#14">14. 测试体系</a></li>
+<li><a href="#15">15. 如何运行 / 扩展 / 排错</a><ul>
+<li><a href="#_2">运行游戏</a></li>
+<li><a href="#_3">扩展清单</a></li>
+<li><a href="#_4">已知坑 / 排错</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<main>
+<h1 id="re-game-arpg">re-game-arpg 架构说明文档</h1>
+<blockquote>
+<p>2.5D 俯视动作 Roguelite ARPG · Godot 4.7.2 · 像素风</p>
+<p>本文基于项目实际代码逐文件阅读整理，描述其<strong>运行架构、模块边界、数据流与约定</strong>。
+修改任何脚本/场景/UI/数据前，请先对照本文与 <code>.workbuddy/skills/godot-arpg-conventions/SKILL.md</code>。</p>
+</blockquote>
+<hr />
+<h2 id="_1">目录</h2>
+<ol>
+<li><a href="#">项目概览</a></li>
+<li><a href="#">技术栈与工程配置</a></li>
+<li><a href="#">目录结构总览</a></li>
+<li><a href="#">运行时架构与启动流程</a></li>
+<li><a href="#5-autoload">核心系统（Autoload 单例）</a></li>
+<li><a href="#">数据层</a></li>
+<li><a href="#">战斗系统</a></li>
+<li><a href="#">世界与可交互物</a></li>
+<li><a href="#9-ui">UI 系统</a></li>
+<li><a href="#10-roguelite">Roguelite 词条系统</a></li>
+<li><a href="#">特效系统</a></li>
+<li><a href="#12-tools">构建与资源管线（tools/ 生成器）</a></li>
+<li><a href="#">项目约定速查</a></li>
+<li><a href="#">测试体系</a></li>
+<li><a href="#">如何运行 / 扩展 / 排错</a></li>
+</ol>
+<hr />
+<h2 id="1">1. 项目概览</h2>
+<p><strong>re-game-arpg</strong> 是一款 2.5D 俯视视角的动作 Roguelite 原型：玩家从城镇出发，进入野外、地牢，最终挑战 Boss 房。核心循环是「清怪 → 三选一词条成长 → 变强 → 打更硬的怪」。</p>
+<p>设计理念（贯穿整个代码库）：</p>
+<ul>
+<li><strong>行为即代码，数值即数据</strong>：所有可调参数（伤害、速度、冷却、字号、颜色）一律外置到 <code>@export</code> / <code>Theme</code> / <code>.tres</code> / 生成器脚本，代码只描述行为逻辑。</li>
+<li><strong>系统解耦</strong>：任意两个系统互不持有引用，只通过 <code>EventBus</code> 信号通信，任一系统可被单独删除或替换。</li>
+<li><strong>数据驱动</strong>：一把武器 = 一个 <code>WeaponData</code> 资源，不为武器建专属 <code>.tscn</code>；词条、敌人、关卡、教程全是目录扫描发现的资源。</li>
+<li><strong>资源由生成器产出</strong>：所有 <code>.tscn</code> / <code>.tres</code> 由 <code>tools/</code> 下的生成器脚本唯一生成，不直接手改产物。</li>
+</ul>
+<hr />
+<h2 id="2">2. 技术栈与工程配置</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>引擎</td>
+<td>Godot 4.7.2（<code>GL Compatibility</code> 渲染后端）</td>
+</tr>
+<tr>
+<td>主场景</td>
+<td><code>res://scenes/core/boot.tscn</code></td>
+</tr>
+<tr>
+<td>分辨率</td>
+<td>视口 <strong>320×180</strong>，4 倍整数拉伸到 <strong>1280×720</strong></td>
+</tr>
+<tr>
+<td>字体</td>
+<td>Fusion Pixel 12px（点阵，SIL OFL 1.1），导入参数 <code>oversampling=4.0</code>（"放大再缩小"以保清晰）</td>
+</tr>
+<tr>
+<td>语言</td>
+<td>GDScript（全静态类型）</td>
+</tr>
+<tr>
+<td>存档</td>
+<td><code>user://savegame.json</code>（自定义 JSON 序列化）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="inputmap">输入映射（InputMap）</h3>
+<table>
+<thead>
+<tr>
+<th>动作</th>
+<th>含义</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>move_left</code> / <code>move_right</code> / <code>move_up</code> / <code>move_down</code></td>
+<td>移动（四向，组合成向量）</td>
+<td>斜向已归一化</td>
+</tr>
+<tr>
+<td><code>attack</code></td>
+<td>轻攻击</td>
+<td>后摇可取消</td>
+</tr>
+<tr>
+<td><code>heavy_attack</code></td>
+<td>重攻击（按下蓄力 / 松开释放）</td>
+<td></td>
+</tr>
+<tr>
+<td><code>roll</code></td>
+<td>翻滚</td>
+<td>带无敌帧</td>
+</tr>
+<tr>
+<td><code>spell_1/2/3</code></td>
+<td>法术槽</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ability_1/2</code></td>
+<td>主动技能槽</td>
+<td></td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>交互 / 确认</td>
+<td>同时用于教程确认、帮助关闭</td>
+</tr>
+<tr>
+<td><code>pause</code></td>
+<td>暂停菜单</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ui_accept</code> / <code>ui_cancel</code></td>
+<td>通用确认/取消（物理键判定，含 J/回车等）</td>
+<td>关闭弹窗用</td>
+</tr>
+</tbody>
+</table>
+<h3 id="projectgodot-layer_names">碰撞层约定（<code>project.godot</code> 的 <code>[layer_names]</code>）</h3>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>World（地形/墙）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>PlayerBody</td>
+</tr>
+<tr>
+<td>3</td>
+<td>EnemyBody</td>
+</tr>
+<tr>
+<td>4</td>
+<td>PlayerHurtbox</td>
+</tr>
+<tr>
+<td>5</td>
+<td>EnemyHurtbox</td>
+</tr>
+<tr>
+<td>6</td>
+<td>PlayerAttack</td>
+</tr>
+<tr>
+<td>7</td>
+<td>EnemyAttack</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Pickup</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Projectile</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Interactable</td>
+</tr>
+</tbody>
+</table>
+<p>受击盒（<code>Hurtbox</code>）只 <code>monitorable</code>、不 <code>monitoring</code>；攻击盒/弹道主动扫描。这是"被动受击、主动攻击"分离的基础。</p>
+<hr />
+<h2 id="3">3. 目录结构总览</h2>
+<pre><code>re-game-arpg/
+├── project.godot                # 工程配置：autoload、渲染、输入、碰撞层
+├── boot.gd / boot.tscn         # 实际上 boot 在 scenes/core/
+├── scenes/                     # 所有场景（由 tools/ 生成器产出）
+│   ├── core/                   # boot、transition（转场遮罩）
+│   ├── player/                 # player.tscn
+│   ├── enemies/                # enemy.tscn（所有敌人共用）
+│   ├── fx/                     # projectile / area_spell / enemy_projectile
+│   ├── levels/                 # town / field / dungeon_1/2 / boss_room
+│   ├── ui/                     # 各 UI 面板场景
+│   ├── weapons/                # weapon.tscn（武器通用场景）
+│   └── world/                  # npc / chest / sign_post / locked_door / save_point / heal_spring
+├── scripts/                    # 79 个 .gd，按域分子目录
+│   ├── core/                   # boot, event_bus, data_registry, game_state,
+│   │                           #   scene_director, tutorial_system, hit_stop,
+│   │                           #   audio_manager, transition
+│   ├── data/                   # *Data 资源类 + game_enums + damage_info
+│   ├── combat/                 # actor, attack_controller, weapon_controller,
+│   │                           #   projectile, ability, area_spell, attack_box
+│   ├── player/                 # player, player_combat, player_camera, actor_sprite
+│   ├── enemies/                # enemy_base
+│   ├── world/                  # level_runtime, interactable, npc, chest, ...
+│   ├── ui/                     # hud, dialog_ui, tutorial_ui, help_panel,
+│   │                           #   popup_manager, main_menu, pause_menu, ...
+│   ├── roguelite/             # modifier_system
+│   └── fx/                     # fx_sprite
+├── data/                       # 67 个 .tres 数据资源（武器/法术/技能/敌人/
+│                               #   词条/关卡/教程/攻击帧/物品/角色）
+├── resources/                  # ui_theme.tres + 3 套 tileset
+├── assets/                     # 美术/音频/字体/特效贴图（499 个文件）
+├── tools/                     # 生成器 + 测试（71 个文件）
+└── docs/                       # 文档、日志、QA 截图
+</code></pre>
+<p><strong>脚本/场景数量</strong>：79 个 <code>.gd</code>、55 个 <code>.tscn</code>（含 <code>big_sword.tscn</code> 孤儿，详见 §15）。</p>
+<hr />
+<h2 id="4">4. 运行时架构与启动流程</h2>
+<h3 id="41-autoload">4.1 Autoload 初始化顺序</h3>
+<p><code>project.godot</code> 的 <code>[autoload]</code> 段（顺序有意义）：</p>
+<pre><code>EventBus → PopupManager → DataRegistry → GameState → ModifierSystem
+         → TutorialSystem → HitStop → AudioManager → SceneDirector
+</code></pre>
+<ul>
+<li><strong>EventBus 必须第一</strong>：其余 autoload 在 <code>_ready</code> 里 <code>connect</code> 信号，若 EventBus 未就绪则连不上。</li>
+<li>SceneDirector 放最后：它依赖 DataRegistry 与 EventBus，且不必在其它系统之前存在。</li>
+</ul>
+<h3 id="42">4.2 启动流程图</h3>
+<pre><code>[Engine 启动]
+   │  按 project.godot 顺序实例化 9 个 autoload（仅注册/连信号，不做玩法）
+   ▼
+[Boot._ready]  (scenes/core/boot.tscn 是 main_scene)
+   ├─ _install_persistent_ui()   挂 8 个常驻 UI 到 root（call_deferred）
+   │     HUD / TutorialUI / BossHealthBar / DialogUI / ModifierChoice
+   │     / InventoryUI / GameOverUI / PauseMenu
+   └─ _show_main_menu()  → 实例化 MainMenu 挂到 root
+   ▼
+[玩家点&quot;开始&quot;（或 skip_menu）]
+   └─ _begin_game()
+        ├─ GameState.start_run()        // 清空局内状态，emit run_started
+        ├─ TutorialSystem.start_tutorial()  // 新档才启用
+        └─ SceneDirector.change_to_level(&amp;&quot;town&quot;, &amp;&quot;start&quot;)
+             │
+             ▼  _fade_out → _swap_scene → _fade_in
+                  ├─ queue_free 旧场景（await process_frame）
+                  ├─ 实例化 LevelData.scene → 挂到 root（call_deferred）
+                  ├─ await process_frame
+                  ├─ _spawn_player(entry_point)   // 复用或新建 Player
+                  ├─ AudioManager.play_music(level.bgm)
+                  └─ EventBus.scene_changed.emit(scene)
+                       └─ HUD._on_scene_changed → 解绑旧玩家，等待重新绑定
+                       └─ TutorialSystem._on_scene_changed → 评估当前步骤是否该播
+</code></pre>
+<p><strong>关键时序约束</strong>（踩过的坑，已在代码注释固化）：</p>
+<ul>
+<li><code>_ready()</code> 里往 <code>root</code> 加节点必须 <code>call_deferred</code>，否则报 <code>Parent node is busy setting up children</code> 并静默失败。</li>
+<li><code>call_deferred</code> / <code>queue_free</code> 后必须 <code>await get_tree().process_frame</code> 才生效，否则紧接着操作拿到空节点。</li>
+<li>常驻 HUD 在开场几帧必然拿不到玩家（玩家每关重建），用"每帧重试绑定直到成功"而不是一次性绑定。</li>
+</ul>
+<h3 id="43">4.3 关卡流转</h3>
+<p><code>SceneDirector</code> 是唯一负责场景切换的服务：</p>
+<ul>
+<li><code>change_to_level(level_id, entry_point)</code>：检查 <code>_changing</code> 防连点 → 淡出 → 换场景 → 放玩家 → 淡入。整个流程用 <code>try/finally</code> 式写法保证 <code>_changing</code> 复位（否则后续所有切换会被静默丢弃）。</li>
+<li><code>set_next_spawn_position(pos)</code>：<strong>必须在</strong> <code>change_to_level</code> 之前调用，玩家生成时直接落在该坐标（存档点复活用），而非先出生再改坐标——后者会与异步切换抢时序。</li>
+<li>出口 <code>Trigger</code> 由 <code>LevelRuntime._connect_doors()</code> 监听，玩家踩到 → <code>EventBus.scene_change_requested</code> → SceneDirector 响应。</li>
+</ul>
+<hr />
+<h2 id="5-autoload">5. 核心系统（Autoload 单例）</h2>
+<h3 id="51-eventbus">5.1 EventBus —— 通信中枢</h3>
+<p><code>scripts/core/event_bus.gd</code>。<strong>只放 <code>signal</code> 声明，不放任何逻辑与状态</strong>（否则会变成上帝对象）。信号按域分区：</p>
+<ul>
+<li><strong>战斗</strong>：<code>damage_dealt</code> / <code>hit_landed</code> / <code>unit_died</code> / <code>health_changed</code> / <code>mana_changed</code></li>
+<li><strong>玩家/成长</strong>：<code>player_stats_changed</code> / <code>experience_gained</code> / <code>player_died</code> / <code>item_acquired</code> / <code>equipment_changed</code></li>
+<li><strong>Roguelite</strong>：<code>modifier_choice_requested</code> / <code>modifier_chosen</code> / <code>run_started</code> / <code>run_ended</code></li>
+<li><strong>关卡</strong>：<code>scene_change_requested</code> / <code>scene_changed</code> / <code>room_cleared</code> / <code>boss_defeated</code></li>
+<li><strong>UI/系统</strong>：<code>floating_text_requested</code> / <code>toast_requested</code> / <code>dialog_requested</code> / <code>dialog_sequence_requested</code> / <code>dialog_opened</code> / <code>dialog_closed</code> / <code>tutorial_step_shown</code> / <code>tutorial_finished</code> / <code>hit_stop_requested</code> / <code>camera_shake_requested</code></li>
+</ul>
+<p><strong>约定</strong>：信号名 <code>领域_事件</code>；复杂数据传 <code>Resource</code> 或 <code>Dictionary</code>；<code>Callable</code> 回调必须安全调用（见 §13）。</p>
+<h3 id="52-dataregistry">5.2 DataRegistry —— 数据注册中心</h3>
+<p><code>scripts/core/data_registry.gd</code>。启动时扫描 <code>res://data/</code> 下 9 个目录，按 <code>class_name</code> 归类建索引，提供 O(1) 查询。</p>
+<ul>
+<li><strong>为什么用目录扫描而非手写列表</strong>：新加 <code>.tres</code> 只需丢文件，策划/美术不碰代码。导出后 <code>.pck</code> 内 <code>ResourceLoader.list_directory</code> 同样可用。</li>
+<li>资源 id 优先级：<strong>显式 id 字段 &gt; 文件名</strong>（不用 <code>display_name</code>，避免改中文名就查不到）。</li>
+<li><code>class_name</code> 必填：缺了 <code>get_script().get_global_name()</code> 为空，该资源被跳过并 <code>push_warning</code>。</li>
+<li>查询失败一律 <code>push_warning</code>（静默失败最难查）。</li>
+</ul>
+<h3 id="53-gamestate">5.3 GameState —— 运行状态与存档</h3>
+<p><code>scripts/core/game_state.gd</code>。保存"跨场景存活"的数据，且<strong>严格区分局内/局外</strong>：</p>
+<ul>
+<li><strong>局外（永久）</strong>：<code>unlocked_spells/abilities/weapons</code>、<code>gold</code>、<code>defeated_bosses</code>、<code>furthest_level</code>、<code>tutorial_completed</code>、<code>inventory</code>。</li>
+<li><strong>局内（run 结束清零）</strong>：<code>run_modifiers</code>、<code>run_active</code>、<code>run_kills</code>、<code>run_time</code>、<code>respawn_*</code>。</li>
+</ul>
+<p><code>start_run()</code> 清空局内并 <code>emit run_started</code>（ModifierSystem 监听以清词条）；<code>end_run(victory)</code> 清词条并 <code>save_game()</code>。<strong>不直接引用玩家节点</strong>——破坏"系统不互相持有引用"约定。</p>
+<h3 id="54-scenedirector">5.4 SceneDirector —— 场景切换服务</h3>
+<p>见 §4.3。</p>
+<h3 id="55-tutorialsystem">5.5 TutorialSystem —— 新手教程</h3>
+<p><code>scripts/core/tutorial_system.gd</code>（注意：它是 autoload，<strong>不能</strong>写 <code>class_name</code>，否则与单例冲突）。</p>
+<ul>
+<li>从 DataRegistry 读 <code>TutorialStep</code> 按 <code>order</code> 排序；只在 <code>GameState.tutorial_completed == false</code> 时启用。</li>
+<li>步骤显示走<strong>唯一</strong>通道 <code>EventBus.tutorial_step_shown</code>（顶部面板），<strong>不</strong>再发 <code>dialog_requested</code>（旧实现两路都发，同一句话出现两遍）。</li>
+<li>关键语义：当前步骤不属于本关卡时<strong>原地待命</strong>，等 <code>scene_changed</code> 再播——绝不能"跳过不匹配的步骤"，否则主菜单阶段就把 14 步全走完自毁。</li>
+<li><code>pause_game</code> 步骤会经 <code>PauseManager</code> 令牌冻结世界：冻结状态由当前步骤推导（<code>_sync_pause()</code>），每一条出口都同步一次，不做"成对 freeze/unfreeze + 私有布尔"的记账；连续两个阻塞步之间令牌不交还，冻结连续不断。另外带 <code>trigger_action</code>（要玩家在世界里做事才算完成）的步骤即使配了 <code>pause_game</code> 也<strong>不冻结</strong>——冻结会让完成条件永远达不成。玩家可主动 <code>dismiss_current_step()</code> 跳过自动隐藏的步骤。</li>
+</ul>
+<h3 id="56-hitstop">5.6 HitStop —— 命中顿帧</h3>
+<p><code>scripts/core/hit_stop.gd</code>。命中瞬间把 <code>Engine.time_scale</code> 压到接近 0 持续极短，制造"刀刀到肉"手感。</p>
+<ul>
+<li>计时器必须用 <code>ignore_time_scale = true</code> 的 <code>create_timer</code>，否则 time_scale 压低后计时器也被拖慢，顿帧永不结束。</li>
+<li>用 <code>_token</code> 代次处理嵌套顿帧：只有"最后一次请求"有权恢复 <code>time_scale</code>。</li>
+<li><code>tree_exiting</code> 强制复位（切场景不留残顿帧）。</li>
+</ul>
+<h3 id="57-audiomanager">5.7 AudioManager —— 音频服务</h3>
+<p><code>scripts/core/audio_manager.gd</code>。预创建 16 个 <code>AudioStreamPlayer</code> 池；<code>play_sfx</code> 从池取空闲播放器（全忙则丢弃），随机音调避免重复音效呆板；<code>play_music</code> 同曲不重启。<code>stream == null</code> 静默返回（允许数据留空）。</p>
+<h3 id="58-popupmanager">5.8 PopupManager —— 弹窗互斥调度</h3>
+<p><code>scripts/ui/popup_manager.gd</code>（autoload，顺序紧随 EventBus，确保最先就绪）。解决"多来源同时弹窗"问题：</p>
+<ul>
+<li>同一时刻只放一个活动弹窗；晚到的进按<strong>优先级</strong>排序的队列（教程 100 &gt; 帮助 60 &gt; 对话 50）。</li>
+<li><code>is_close_key(event)</code> / <code>is_close_click(event)</code> 集中判定统一关闭手势（J / 回车 / 左键）。</li>
+<li>提示条（Notice）是非阻塞 toast，<strong>不参与互斥</strong>。</li>
+</ul>
+<hr />
+<h2 id="6">6. 数据层</h2>
+<p><code>scripts/data/</code> 下是一组 <strong>资源类（<code>*.gd</code> + <code>*.tres</code>）</strong>，描述"是什么"而非"怎么动"。</p>
+<table>
+<thead>
+<tr>
+<th>资源类</th>
+<th>文件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CharacterData</code></td>
+<td><code>data/characters/*.tres</code></td>
+<td>角色基础属性模板：血量/法力/攻防/移速/暴击/韧性/击退抗性/受击表现/死亡溶解参数</td>
+</tr>
+<tr>
+<td><code>EnemyData</code></td>
+<td><code>data/enemies/*.tres</code></td>
+<td>敌人属性（含 AI 类型、掉落）</td>
+</tr>
+<tr>
+<td><code>WeaponData</code></td>
+<td><code>data/weapons/*.tres</code></td>
+<td>武器：贴图、判定盒偏移/尺寸、挥砍弧线、是否跟随瞄准、范围倍率、关联场景</td>
+</tr>
+<tr>
+<td><code>AttackData</code></td>
+<td><code>data/attacks/*.tres</code></td>
+<td>单次攻击的帧数据：前摇/判定/后摇、连击窗口、取消窗口、自位移、命中盒</td>
+</tr>
+<tr>
+<td><code>SpellData</code></td>
+<td><code>data/spells/*.tres</code></td>
+<td>法术：投射物/区域、元素、伤害、冷却</td>
+</tr>
+<tr>
+<td><code>AbilityData</code></td>
+<td><code>data/abilities/*.tres</code></td>
+<td>主动技能（冲刺/治疗/旋风斩等）</td>
+</tr>
+<tr>
+<td><code>ModifierData</code></td>
+<td><code>data/modifiers/*.tres</code></td>
+<td>词条：作用目标、操作类型(FLAT/PERCENT/MULTIPLY)、数值、叠加上限、权重、作用域过滤</td>
+</tr>
+<tr>
+<td><code>ItemData</code></td>
+<td><code>data/items/*.tres</code></td>
+<td>物品（金币/钥匙/药水）</td>
+</tr>
+<tr>
+<td><code>LevelData</code></td>
+<td><code>data/levels/*.tres</code></td>
+<td>关卡：场景引用、默认入口、BGM、相机边界、环境色</td>
+</tr>
+<tr>
+<td><code>TutorialStep</code></td>
+<td><code>data/tutorial/*.tres</code></td>
+<td>教程步骤：顺序、标题、文本、是否需确认、是否暂停、自动隐藏时长、适用关卡</td>
+</tr>
+<tr>
+<td><code>GameEnums</code></td>
+<td><code>data/game_enums.gd</code></td>
+<td>全局枚举：<code>StatKind</code> / <code>ModifierTarget</code> / <code>ModifierOp</code> / <code>Element</code> 等</td>
+</tr>
+<tr>
+<td><code>DamageInfo</code></td>
+<td><code>data/damage_info.gd</code></td>
+<td>伤害信息载体：amount / is_crit / knockback / poise_damage / source / element</td>
+</tr>
+</tbody>
+</table>
+<p><strong>唯一属读取口</strong>：<code>Actor.get_stat(kind, context)</code>（见 §7.1）。任何伤害/移动/冷却计算都必须走它，否则 Roguelite 词条全部失效。</p>
+<hr />
+<h2 id="7">7. 战斗系统</h2>
+<p>战斗是一条"基类 → 组件"的清晰链路，把"数值"与"行为"彻底分离。</p>
+<h3 id="71-actor">7.1 Actor —— 有血条单位的基类</h3>
+<p><code>scripts/combat/actor.gd</code>（<code>extends CharacterBody2D</code>）。玩家、敌人、Boss 的公共部分：血量/法力、受伤结算（乘法减伤 <code>dmg * 100/(100+def)</code>）、无敌帧、硬直、击退（指数衰减）、死亡（溶解/淡出）。</p>
+<ul>
+<li><code>get_stat(kind, context)</code>：<strong>全游戏唯一的属性读取口</strong>。玩家经 <code>ModifierSystem.apply_stat</code> 叠加词条；敌人直接取 <code>CharacterData</code>。</li>
+<li><code>get_attack_context()</code>：默认空（敌人不吃词条），玩家覆写返回当前武器类别/残血触发。</li>
+<li><code>apply_damage(info)</code>：唯一扣血入口。霸体不进硬直；击退按 <code>knockback_resist</code> 打折（Boss 设 1.0 即站桩）。</li>
+<li>受击表现（闪色 + 抖动 + 溶解）全部参数来自 CharacterData，Boss/精英可调。ShaderMaterial 复用同一份避免泄漏。</li>
+</ul>
+<h3 id="72-player">7.2 Player —— 玩家角色</h3>
+<p><code>scripts/player/player.gd</code>（<code>extends Actor</code>）。把输入翻译成动作，实现三大量产手感规则：</p>
+<ol>
+<li><strong>输入缓冲</strong>：攻击/翻滚早按被记住，窗口一到立刻执行。</li>
+<li><strong>土狼时间(Coyote)</strong>：离开可行动状态后极短时间仍允许出招。</li>
+<li><strong>后摇取消</strong>：攻击后摇可被翻滚或移动取消。</li>
+</ol>
+<ul>
+<li>状态机 <code>enum State { IDLE, MOVE, ATTACK, ROLL, HURT, DEAD }</code>。</li>
+<li>用 <code>_unhandled_input</code> 而非 <code>_input</code>：UI 打开时按键不驱动角色。</li>
+<li><strong>关键修复</strong>：对话<strong>不再</strong>锁玩家动作（旧实现 <code>if DialogUI.is_open: return</code> 会导致对话框因换场景/死亡/回调悬空没关掉时，新玩家一出生就被永久锁死）。对话期间照样能移动/攻击/翻滚，走开即"结束对话"。</li>
+</ul>
+<h3 id="73-attackcontroller">7.3 AttackController —— 攻击时间轴</h3>
+<p><code>scripts/combat/attack_controller.gd</code>（组件，挂在玩家/敌人场景里）。驱动"前摇 → 判定 → 后摇"三段，实现输入缓冲、连击衔接（<code>combo_window</code> 内接下一段）、后摇取消（<code>can_cancel()</code>）。</p>
+<ul>
+<li>用"时间累加器 + <code>enum Phase</code>"而非三个 Timer 节点，最直观且方便整体乘攻速倍率。</li>
+<li>判定盒位置/旋转委托给 <code>WeaponController</code>（配置了武器时）或自带 <code>AttackBox</code>。</li>
+</ul>
+<h3 id="74-weaponcontroller">7.4 WeaponController —— 武器解耦</h3>
+<p><code>scripts/combat/weapon_controller.gd</code>（独立场景根节点，<code>extends Node2D</code>）。<strong>换武器 = 换数据，不换脚本/场景</strong>：</p>
+<ul>
+<li>全项目共用 <code>res://scenes/weapons/weapon.tscn</code>，差异由 <code>WeaponData</code> 字段描述，<code>setup(data, wielder)</code> 运行时套用。</li>
+<li>结构：<code>WeaponController → SwingPivot → { Sprite2D, AttackBox(Area2D) }</code>。根节点每帧转到瞄准角，判定盒随武器转 → "判定跟随武器而非角色"。</li>
+<li><code>static func create(data, wielder)</code>：统一实例化入口，<code>weapon_scene</code> 有值用专用场景，否则用通用场景。</li>
+<li>每把武器实例持有自己的 <code>CollisionShape2D</code>（<code>.duplicate()</code>），避免共用资源互相污染判定尺寸。</li>
+</ul>
+<h3 id="75">7.5 其余战斗组件</h3>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>combat/projectile.gd</code></td>
+<td>玩家投射物（弓箭/法球），命中触发 <code>DamageInfo</code></td>
+</tr>
+<tr>
+<td><code>combat/area_spell.gd</code></td>
+<td>区域法术（火环/冰爆），持续/瞬时判定</td>
+</tr>
+<tr>
+<td><code>combat/attack_box.gd</code></td>
+<td>攻击判定盒，<code>hit_confirmed(target, info)</code> 信号</td>
+</tr>
+<tr>
+<td><code>combat/ability.gd</code></td>
+<td>主动技能逻辑（冲刺/旋风斩/治疗等）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8">8. 世界与可交互物</h2>
+<h3 id="81-levelruntime">8.1 LevelRuntime —— 关卡运行时</h3>
+<p><code>scripts/world/level_runtime.gd</code>（<code>extends Node2D</code>，挂在每关根节点）。把"静态配置"变"活的玩法"：</p>
+<ul>
+<li>按 <code>LevelData</code> + 敌人池随机生成敌人（以关卡名为种子保证布局一致；避开玩家 <code>min_spawn_distance</code>）。</li>
+<li>监听出口 <code>Trigger</code> → 切场景；统计清怪进度，全清后 <code>room_cleared</code> 并<strong>弹三选一词条</strong>（Roguelite 入口）。</li>
+<li><code>CanvasModulate</code> 套环境色（地牢更暗、野外偏暖）。</li>
+<li>零敌人关卡（城镇/Boss 房）直接判为已清空，否则 <code>require_clear</code> 的锁门会永久锁死。</li>
+<li>Boss 由场景里带 <code>boss_id</code> meta 的标记点生成。</li>
+</ul>
+<h3 id="82-interactable">8.2 可交互物（<code>Interactable</code> 体系）</h3>
+<p>基类 <code>scripts/world/interactable.gd</code>（<code>extends Area2D</code>，监听 <code>interact</code> 输入 + 玩家进入范围）。派生：</p>
+<table>
+<thead>
+<tr>
+<th>脚本</th>
+<th>文件</th>
+<th>交互</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>npc.gd</code></td>
+<td><code>scenes/world/npc.tscn</code></td>
+<td>触发 <code>dialog_sequence_requested</code> 多句对话</td>
+</tr>
+<tr>
+<td><code>chest.gd</code></td>
+<td><code>world/chest.tscn</code></td>
+<td>开箱给物品</td>
+</tr>
+<tr>
+<td><code>sign_post.gd</code></td>
+<td><code>world/sign_post.tscn</code></td>
+<td>触发 <code>dialog_requested</code> 顶部提示</td>
+</tr>
+<tr>
+<td><code>locked_door.gd</code></td>
+<td><code>world/locked_door.tscn</code></td>
+<td>持有钥匙才放行</td>
+</tr>
+<tr>
+<td><code>save_point.gd</code></td>
+<td><code>world/save_point.tscn</code></td>
+<td>记录复活点</td>
+</tr>
+<tr>
+<td><code>heal_spring.gd</code></td>
+<td><code>world/heal_spring.tscn</code></td>
+<td>回血</td>
+</tr>
+</tbody>
+</table>
+<p><strong>交互设计原则</strong>：<code>interact</code>(F) 只作快捷键，面板/交互以鼠标为主；交互物<strong>不再读</strong> <code>DialogUI.is_open</code> 去屏蔽动作（曾因此永久锁死玩家）。</p>
+<hr />
+<h2 id="9-ui">9. UI 系统</h2>
+<h3 id="91">9.1 总原则（来自踩坑固化）</h3>
+<ol>
+<li><code>process_mode = PROCESS_MODE_ALWAYS</code>：暂停菜单/背包 <code>get_tree().paused=true</code> 时，继承默认 <code>PAUSED</code> 的 UI 收不到输入——这就是"教程窗口关不掉"的根因。</li>
+<li>全屏常驻 <code>Control.mouse_filter = 2</code>(IGNORE)：曾经把 <code>tutorial_ui</code> 的 Root 设 STOP 想做"点空白关闭"，结果游戏一启动多了一层透明膜吞掉所有点击（"游戏没法运行"真凶）。</li>
+<li>任何挡玩家的面板必须 ≥2 条玩家主动退出途径。</li>
+<li>UI 是<strong>只读消费者</strong>：监听 EventBus 刷新，从不主动抓玩法节点。</li>
+<li>鼠标优先，键盘只是快捷键。</li>
+</ol>
+<h3 id="92-popupmanager">9.2 统一关闭契约（PopupManager 驱动）</h3>
+<p>所有弹窗支持 <strong>J / 回车 / 窗口内左键</strong> 关闭；左键点面板内任意处（非按钮）即关，按钮用 <code>BaseButton.accept_event()</code> 吞掉事件 → 与关闭操作天然互斥。</p>
+<h3 id="93-dialog_uigd">9.3 对话框两条通道（<code>dialog_ui.gd</code>）</h3>
+<p>由 <code>EventBus</code> 驱动，互不干扰：</p>
+<table>
+<thead>
+<tr>
+<th>通道</th>
+<th>信号</th>
+<th>行为</th>
+<th>是否暂停</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>提示条</strong>（Notice）</td>
+<td><code>dialog_requested(text, duration)</code></td>
+<td>顶部非阻塞单句</td>
+<td>否，不锁输入、不发 <code>dialog_opened</code></td>
+</tr>
+<tr>
+<td><strong>对话条</strong>（Bar）</td>
+<td><code>dialog_sequence_requested(speaker, lines, on_finished)</code></td>
+<td>底部逐句推进，播完回调结算</td>
+<td>半阻塞（只吞 interact/advance）</td>
+</tr>
+</tbody>
+</table>
+<p>对话条关闭语义：读到最后一句再关 = 结算奖励；中途关 = 取消不结算。<code>on_finished</code> 为 <code>Callable</code>，回调前先清状态（避免回调里再开对话时数据错乱）。</p>
+<h3 id="94-tutorial_uigd-help_panelgd">9.4 教程/系统弹窗（<code>tutorial_ui.gd</code> + <code>help_panel.gd</code>）</h3>
+<ul>
+<li><strong>TutorialUI</strong>：顶部面板，只负责显示 <code>tutorial_step_shown</code>，自身不推进教程（回调 <code>TutorialSystem.dismiss_current_step()</code>）。支持冻结游戏（见 §9.5）。</li>
+<li><strong>HelpPanel</strong>：操作说明，常从暂停菜单打开。提供 5 条退出途径（关闭按钮/ Esc / F / 右键 / 点遮罩）；<code>_paused_by_me</code> 只对自己造成的暂停负责（从暂停菜单打开时游戏本就暂停，关闭后须保持暂停回到菜单）。</li>
+</ul>
+<h3 id="95-4">9.5 系统级弹窗冻结游戏（需求 §4）</h3>
+<p>教程/帮助显示时 <code>get_tree().paused = true</code>：角色不能移动、不能交互；窗口自身 <code>PROCESS_MODE_ALWAYS</code> 仍收输入——<strong>停的是游戏世界，活的是弹窗</strong>。关闭后恢复。关键：只对自己造成的暂停负责，避免把游戏"放跑"或"卡死"。</p>
+<h3 id="96">9.6 菜单体系</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>main_menu.tscn</code></td>
+<td>主菜单：开始/继续/跳过教程</td>
+</tr>
+<tr>
+<td><code>pause_menu.tscn</code></td>
+<td>暂停：继续/设置/帮助/退出</td>
+</tr>
+<tr>
+<td><code>settings_panel.tscn</code></td>
+<td>设置（音量等）</td>
+</tr>
+<tr>
+<td><code>inventory_ui.tscn</code></td>
+<td>背包（来自 GameState.inventory）</td>
+</tr>
+<tr>
+<td><code>modifier_choice.tscn</code></td>
+<td>三选一词条（响应 <code>modifier_choice_requested</code>）</td>
+</tr>
+<tr>
+<td><code>game_over.tscn</code></td>
+<td>死亡/胜利结算</td>
+</tr>
+<tr>
+<td><code>boss_health_bar.tscn</code></td>
+<td>Boss 血条（监听 <code>unit_died</code>/<code>health_changed</code>）</td>
+</tr>
+<tr>
+<td><code>hud.tscn</code></td>
+<td>主 HUD（血/蓝/技能栏/飘字/提示）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="97-theme">9.7 皮肤与 Theme</h3>
+<ul>
+<li>唯一皮肤来源 <code>resources/ui_theme.tres</code>，由 <code>tools/generate_theme.gd</code> 生成（设计令牌 + 类型变体 <code>TitleLabel</code>/<code>HeadingLabel</code>/<code>HintLabel</code>/<code>AccentLabel</code>/<code>PrimaryButton</code>/<code>DangerButton</code>/<code>QuietButton</code>）。</li>
+<li>节点上<strong>禁止</strong> <code>theme_override_*</code>：曾散落 35 处字号覆盖 + 8 处字体色覆盖，优先级高于主题，导致中文糊成一团。</li>
+<li>九宫格贴图由 <code>tools/generate_ui_skin.gd</code> 程序化生成（12×12、四角 3px、中间纯色纵向无损）。</li>
+<li><strong>交互四态语义不重叠</strong>：normal 凸起 / hover 凸起+金色 / pressed 最深+凹陷+金色描边+文字下沉 1px / disabled 扁平+低对比。pressed 绝不能比 disabled 还灰（"按下去反直觉"的主因）。</li>
+<li>✕ 关闭按钮用<strong>程序生成的 <code>icon_close.png</code></strong>（点阵字体无 U+2715 字形，原 <code>text="✕"</code> 渲染成豆腐块）。</li>
+</ul>
+<hr />
+<h2 id="10-roguelite">10. Roguelite 词条系统</h2>
+<p><code>scripts/roguelite/modifier_system.gd</code>（autoload）。一局内词条的收集与结算：</p>
+<ul>
+<li><strong>为什么独立一层</strong>：<code>CharacterData</code> 是 <code>.tres</code> 资源，运行时改会污染文件；词条是"临时叠加层"，run 结束直接丢弃。</li>
+<li><strong>结算顺序固定</strong> <code>FLAT → PERCENT → MULTIPLY</code>：<code>final = (base + FLAT) * (1 + PERCENT) * MULTIPLY</code>。顺序不能改，否则同组合算出不同结果。</li>
+<li><strong>上下文过滤</strong>：词条有作用域（<code>巨力</code>只对双手武器、<code>烈焰精通</code>只对火系）。取值时带 <code>context</code>（武器类别/元素/触发标签），乘区表按上下文分别缓存（<code>_cache</code>）。</li>
+<li><strong>叠层公式</strong>：<code>n*value + value_per_stack * n(n-1)/2</code>（旧写法 <code>(value+vps*(n-1))*n</code> 多乘了一遍）。</li>
+<li><code>roll_candidates(3)</code>：按 <code>weight</code> 加权、不放回抽样，满层词条不出现。</li>
+<li>监听 <code>EventBus.run_started</code> → <code>clear()</code>。</li>
+</ul>
+<hr />
+<h2 id="11">11. 特效系统</h2>
+<p><code>scripts/fx/fx_sprite.gd</code> + <code>assets/fx/*</code>（按元素/类型分目录：elemental/magic/projectile/slash/smoke）。</p>
+<ul>
+<li>命中表现由 <code>Actor</code> 的 <code>flash_material</code>（ShaderMaterial 溶解/闪色）驱动，参数来自 CharacterData。</li>
+<li>顿帧（<code>HitStop</code>）、屏幕震动（<code>camera_shake_requested</code>）经 EventBus 解耦触发。</li>
+<li>刀光/拖尾由 <code>WeaponController</code> 在挥砍时挂载，<code>SwingPivot</code> 扫动产生"挥砍"而非"戳一下"。</li>
+</ul>
+<hr />
+<h2 id="12-tools">12. 构建与资源管线（tools/ 生成器）</h2>
+<p><code>tools/</code> 下的生成器是全项目 <code>.tscn</code> / <code>.tres</code> 的<strong>唯一作者</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>脚本</th>
+<th>产出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>generate_theme.gd</code></td>
+<td><code>resources/ui_theme.tres</code></td>
+</tr>
+<tr>
+<td><code>generate_ui_skin.gd</code></td>
+<td><code>assets/sprites/ui/theme/gen/*</code>（九宫格 + <code>icon_close.png</code>）</td>
+</tr>
+<tr>
+<td><code>generate_levels.gd</code></td>
+<td>5 个关卡 <code>.tscn</code> + TileSet + LevelData</td>
+</tr>
+<tr>
+<td><code>generate_ui_scenes.gd</code></td>
+<td>主菜单/暂停/设置/说明/教程/Boss血条/背包/结算</td>
+</tr>
+<tr>
+<td><code>generate_world_scenes.gd</code></td>
+<td>世界交互物场景</td>
+</tr>
+<tr>
+<td><code>generate_weapon_scenes.gd</code></td>
+<td>武器场景</td>
+</tr>
+<tr>
+<td><code>generate_tutorial.gd</code></td>
+<td>教程步骤 <code>.tres</code></td>
+</tr>
+<tr>
+<td><code>generate_data.gd</code></td>
+<td><code>data/**/*.tres</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>运行方式</strong>（必须用"运行场景"模式，<strong>不要</strong> <code>--script</code>——被加载场景引用 autoload，<code>--script</code> 模式不注册 autoload 会编译失败）：</p>
+<pre><code class="language-bash">Godot --headless --path . res://tools/generate_theme.tscn
+</code></pre>
+<p><strong>规则</strong>：改布局/皮肤/关卡 → 改生成器 → 重跑生成器 → 回归测试。绝不手改产物。</p>
+<hr />
+<h2 id="13">13. 项目约定速查</h2>
+<p>（完整版见 <code>.workbuddy/skills/godot-arpg-conventions/SKILL.md</code>）</p>
+<ol>
+<li><strong>禁用 <code>@onready</code></strong>（全项目 0 处）。节点引用一律 <code>@export var xxx_path: NodePath</code> + <code>_ready()</code> 里 <code>_resolve_nodes()</code> 用 <code>get_node_or_null() as 类型</code>，全项目 62 处。</li>
+<li><strong>五段式文件头</strong>（55/55 覆盖）：【负责什么】【挂哪个节点】【依赖谁】【怎么扩展】（+【为什么…】解释反直觉设计）。</li>
+<li><strong>文件内分区顺序</strong>：信号 → enum → 常量 → @export → 私有变量 → 生命周期 → 公开 → 私有 → 信号回调；私有成员 <code>_</code> 前缀。</li>
+<li><strong><code>class_name</code> 必填</strong>（40 个脚本）；全静态类型；字面量 <code>StringName</code> 用 <code>&amp;""</code>（145 处）；数值走 <code>@export_range</code>（125 处）。</li>
+<li><strong>EventBus 单向</strong>：系统间不互相持有引用，只收发信号；<code>Callable</code> 回调必须安全调用（校验 <code>is_valid()</code> + <code>is_instance_valid()</code>）。</li>
+<li><strong>UI 硬规则</strong>：<code>PROCESS_MODE_ALWAYS</code>；全屏 Control <code>mouse_filter=2</code>；≥2 条退出途径；禁止全局静态开关锁玩家。</li>
+<li><strong>资源由生成器产出</strong>；数据驱动（一把武器一个 <code>WeaponData</code>）。</li>
+<li><strong>测试即契约</strong>：每个 bug 补守卫测试。</li>
+</ol>
+<hr />
+<h2 id="14">14. 测试体系</h2>
+<p><code>tools/*_test.tscn</code> + <code>tools/playability_check.tscn</code> 是可运行回归守卫。断言风格：<code>_check(ok, msg, detail)</code>，结束 <code>get_tree().quit(0 if _fail==0 else 1)</code>。</p>
+<table>
+<thead>
+<tr>
+<th>测试</th>
+<th>覆盖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>popup_contract_test</code></td>
+<td>弹窗统一关闭、互斥、冻结游戏（13 项，新增）</td>
+</tr>
+<tr>
+<td><code>weapon_dialog_test</code></td>
+<td>对话两条通道、点击/键盘语义、回调结算（49 项）</td>
+</tr>
+<tr>
+<td><code>playability_check</code></td>
+<td>全屏吞点击、点击落世界、玩家移动/攻击、教程/帮助可关（15 项）</td>
+</tr>
+<tr>
+<td><code>combat_arch_test</code></td>
+<td>战斗架构契约（15 项）</td>
+</tr>
+<tr>
+<td><code>delivery_test</code></td>
+<td>交付验收（93 项）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>护规则</strong>：flaky 先确认再改代码（连跑 3 次一致才判真回归）；自检断言用 <code>is_visible_in_tree()</code>（非 <code>visible</code>）、<code>get_combined_minimum_size()</code>（非 <code>size</code>）；UI 视觉用 PIL 数值化验证（斜面方向/状态阶梯/内容位移/画面艳度），且先打印真实 <code>RECT</code> 再取样（按钮真实高 31 视口 px）。</p>
+<hr />
+<h2 id="15">15. 如何运行 / 扩展 / 排错</h2>
+<h3 id="_2">运行游戏</h3>
+<pre><code>Godot_v4.7.2-stable_win64.exe --path D:/GodotProject/re-game-arpg
+</code></pre>
+<p>（编辑器内直接 F5 亦可；截图/真机用无控制台版 exe）</p>
+<h3 id="_3">扩展清单</h3>
+<table>
+<thead>
+<tr>
+<th>想加什么</th>
+<th>动哪里</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新武器</td>
+<td>新建 <code>data/weapons/xxx.tres</code>（填 WeaponData 字段），无需新场景</td>
+</tr>
+<tr>
+<td>新词条</td>
+<td>新建 <code>data/modifiers/xxx.tres</code> + 在 <code>GameEnums.ModifierTarget</code>/<code>_matches_context</code> 加作用域</td>
+</tr>
+<tr>
+<td>新敌人</td>
+<td>新建 <code>data/enemies/xxx.tres</code>，复用 <code>enemy.tscn</code></td>
+</tr>
+<tr>
+<td>新关卡</td>
+<td><code>data/levels/xxx.tres</code> + <code>generate_levels.gd</code> + <code>resources/tilesets/</code></td>
+</tr>
+<tr>
+<td>新教程步骤</td>
+<td>新建 <code>data/tutorial/step_xxx.tres</code></td>
+</tr>
+<tr>
+<td>新 UI 面板</td>
+<td>写 <code>scripts/ui/xxx.gd</code>（五段式头、<code>NodePath</code> 引用、<code>PROCESS_MODE_ALWAYS</code>）+ 生成器</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">已知坑 / 排错</h3>
+<ul>
+<li><strong>改 <code>.tscn</code> 被覆盖</strong>：你手改了 <code>scenes/ui/*.tscn</code>，一跑生成器就没了 → 改生成器。</li>
+<li><strong><code>big_sword.tscn</code> 孤儿</strong>：<code>scenes/weapons/big_sword.tscn</code> 是历史遗留（武器 <em>data</em> 保留，多余场景删掉）。若编辑器（Steam Godot）开着，会被 <code>open_scenes</code> 缓存<strong>复活</strong>——删场景要连 <code>.godot/editor/editor_layout.cfg</code> 的 <code>open_scenes</code>、<code>project_metadata.cfg</code>、<code>filesystem_cache10</code>、<code>.godot/editor/&lt;场景&gt;-*</code> 一起清。</li>
+<li><strong>对话框关不掉/锁死</strong>：检查是否又出现了"读 <code>is_open</code> 去屏蔽玩家动作"或"全屏 Control <code>mouse_filter=STOP</code>"。</li>
+<li><strong>词条不生效</strong>：确认伤害/移速计算走的是 <code>Actor.get_stat()</code> 而非直接读 <code>data.xxx</code>。</li>
+<li><strong>中文糊/错位</strong>：检查是否出现 <code>theme_override_font_sizes</code>；改 <code>generate_theme.gd</code> 比手改节点更稳。</li>
+</ul>
+<hr />
+<p><em>文档基于 2026-09-12 代码快照整理。任何架构改动请同步更新本文与 <code>docs/LOG.md</code>。</em></p>
+</main>
+</div>
+<script>
+  // 移动端：点击目录项后收起
+  document.querySelectorAll('nav a').forEach(function(a){
+    a.addEventListener('click', function(){ document.querySelector('nav').classList.remove('open'); });
+  });
+</script>
+</body>
+</html>
