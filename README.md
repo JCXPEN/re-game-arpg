@@ -61,38 +61,44 @@ GODOT="D:/Godot_v4.7.2-stable_win64.exe/Godot_v4.7.2-stable_win64_console.exe"
 re-game-arpg/
 ├── project.godot            # 输入映射 / autoload / 物理层 / 像素渲染
 ├── assets/                  # 全部 CC0 素材（见 docs/ASSETS.md）
-├── data/                    # 全部数值：90 个 .tres，禁止硬编码
+├── data/                    # 全部数值：89 个 .tres，禁止硬编码
 │   ├── attacks/ weapons/ spells/ abilities/
 │   ├── characters/ enemies/ modifiers/ items/ levels/ tutorial/
 ├── scripts/
-│   ├── core/                # EventBus / DataRegistry / GameState / HitStop /
-│   │                        # AudioManager / SceneDirector / Transition /
+│   ├── core/                # EventBus / DataRegistry / GameState / GameFlow /
+│   │                        # SceneDirector / Transition / HitStop / SaveManager /
+│   │                        # AudioManager / SettingsService / UIRegistry /
 │   │                        # TutorialSystem / Boot
-│   ├── data/                # 10 个 Resource 定义 + GameEnums
+│   ├── data/                # 12 个 Resource 定义 + GameEnums
 │   ├── combat/              # Actor / DamageInfo / AttackBox / AttackController /
-│   │                        # Projectile / AreaSpell / Ability
+│   │                        # WeaponController / Projectile / AreaSpell / Ability
 │   ├── player/              # Player / PlayerCombat / PlayerCamera / ActorSprite
 │   ├── enemies/             # EnemyBase（三合一状态机）
 │   ├── world/               # LevelRuntime / Interactable / Chest / SavePoint /
 │   │                        # SignPost / NPC / HealSpring / LockedDoor
 │   ├── roguelite/           # ModifierSystem
-│   ├── ui/                  # HUD / MainMenu / PauseMenu / SettingsPanel /
-│   │                        # HelpPanel / TutorialUI / InventoryUI /
-│   │                        # BossHealthBar / GameOverUI / ModifierChoiceUI /
-│   │                        # FloatingText
+│   ├── ui/                  # HUD / MainMenu / PauseMenu / PauseManager /
+│   │                        # SettingsPanel / HelpPanel / DialogUI / TutorialUI /
+│   │                        # InventoryUI / BossHealthBar / GameOverUI /
+│   │                        # ModifierChoiceUI / FloatingText / PopupManager /
+│   │                        # UIInputRouter
 │   └── fx/                  # FxSprite
 ├── scenes/
 │   ├── core/ player/ enemies/ fx/
+│   ├── weapons/             # 1 个通用武器场景（换武器 = 换 .tres）
 │   ├── world/               # 6 个交互物场景
 │   ├── levels/              # 5 个关卡（程序化生成）
-│   └── ui/                  # 11 个界面
+│   └── ui/                  # 12 个界面
 ├── shaders/                 # hit_flash.gdshader（闪白+溶解+描边）/ transition.gdshader（转场光圈遮罩）
 ├── resources/               # ui_theme.tres / tilesets
 ├── tools/                   # 生成器与测试（不参与运行）
-└── docs/                    # ASSETS.md / LEVEL_DESIGN.md / LOG.md
+└── docs/                    # 8 篇文档（LEVEL_DESIGN / ASSETS / LOG / ARCHITECTURE /
+                             # ARCHITECTURE_REFACTOR / QA_REPORT / QA_FIXES 等）
+                             # + qa_* 截图目录
 ```
 
-规模：65 个 GDScript（约 11000 行）、29 个场景、90 个数据资源。
+规模：64 个运行时 GDScript（约 13600 行）+ 36 个工具/测试脚本（约 12500 行）、
+31 个游戏场景、89 个数据资源。
 
 ## 架构约定
 
@@ -118,15 +124,16 @@ re-game-arpg/
 GODOT="D:/Godot_v4.7.2-stable_win64.exe/Godot_v4.7.2-stable_win64_console.exe"
 
 # --- 内容生成（改过对应脚本后必须重跑）---
-"$GODOT" --headless --path . res://tools/generate_data.tscn          # 71 个数据资源
+"$GODOT" --headless --path . res://tools/generate_data.tscn          # 70 个数据资源
 "$GODOT" --headless --path . res://tools/generate_levels.tscn        # TileSet + 5 个关卡
 "$GODOT" --headless --path . res://tools/generate_world_scenes.tscn  # 6 个交互物场景
-"$GODOT" --headless --path . res://tools/generate_ui_scenes.tscn     # 11 个 UI 场景
+"$GODOT" --headless --path . res://tools/generate_ui_scenes.tscn     # 12 个 UI 场景
 "$GODOT" --headless --path . res://tools/generate_theme.tscn         # UI 主题
+"$GODOT" --headless --path . res://tools/generate_ui_skin.tscn       # UI 皮肤/九宫格
 "$GODOT" --headless --path . res://tools/generate_tutorial.tscn      # 14 个教程步骤
-"$GODOT" --headless --path . res://tools/generate_weapon_scenes.tscn # 6 个武器场景
+"$GODOT" --headless --path . res://tools/generate_weapon_scenes.tscn # 通用武器场景 weapon.tscn
 
-# --- 测试（共 20 个回归套件，全部通过）---
+# --- 测试（共 21 个回归套件，全部通过）---
 "$GODOT" --headless --path . res://tools/smoke_test.tscn         # 42 项：数据/场景/玩家/摄像机
 "$GODOT" --headless --path . res://tools/combat_test.tscn        # 9 项：攻击盒→受击盒链路
 "$GODOT" --headless --path . res://tools/combat_arch_test.tscn   # 15 项：武器解耦/抗击退/霸体
@@ -137,9 +144,10 @@ GODOT="D:/Godot_v4.7.2-stable_win64.exe/Godot_v4.7.2-stable_win64_console.exe"
 "$GODOT" --headless --path . res://tools/esc_contract_test.tscn  # 39 项：Esc 仲裁/暂停所有权/音频
 "$GODOT" --headless --path . res://tools/esc_lifecycle_test.tscn # 29 项：暂停冻结/回菜单/转场取消（端到端）
 "$GODOT" --headless --path . res://tools/popup_contract_test.tscn # 15 项：弹窗互斥/统一关闭契约
+"$GODOT" --headless --path . res://tools/freeze_contract_test.tscn # 50 项：教程冻结令牌/泄漏回收/提示让位
 "$GODOT" --headless --path . res://tools/settings_contract_test.tscn # 21 项：设置面板退出/滑块可见性/即时落盘
 "$GODOT" --headless --path . res://tools/dialogue_system_test.tscn # 71 项：结构化对话/自适应排版
-"$GODOT" --headless --path . res://tools/weapon_dialog_test.tscn # 49 项：武器统一化 + 对话框
+"$GODOT" --headless --path . res://tools/weapon_dialog_test.tscn # 51 项：武器统一化 + 对话框
 "$GODOT" --headless --path . res://tools/bug_hunt_test.tscn      # 37 项：运行时缺陷狩猎
 "$GODOT" --headless --path . res://tools/bug_hunt2_test.tscn     # 5 项：定点验证
 "$GODOT" --headless --path . res://tools/verify_fixes.tscn       # 17 项：19 个 QA Bug 回归
@@ -150,7 +158,12 @@ GODOT="D:/Godot_v4.7.2-stable_win64.exe/Godot_v4.7.2-stable_win64_console.exe"
 
 # --- 截图（需窗口模式）---
 "$GODOT" --path . --resolution 1280x720 res://tools/capture_all.tscn
-"$GODOT" --path . --resolution 1280x720 res://tools/capture_esc.tscn  # Esc 路径截图 → docs/qa_esc/
+"$GODOT" --path . --resolution 1280x720 res://tools/capture_esc.tscn        # Esc 路径 → docs/qa_esc/
+"$GODOT" --path . --resolution 1280x720 res://tools/capture_dialog.tscn     # 对话排版 → docs/qa_screenshots_dialog/
+"$GODOT" --path . --resolution 1280x720 res://tools/capture_flow.tscn       # 主流程界面 → docs/qa_final/
+"$GODOT" --path . --resolution 1280x720 res://tools/capture_settings.tscn   # 设置面板 → docs/qa_settings/
+"$GODOT" --path . --resolution 1280x720 res://tools/capture_skin.tscn       # UI 皮肤 → docs/qa_skin/
+"$GODOT" --path . --resolution 1280x720 res://tools/capture_weapon_rot.tscn # 武器旋转判定 → docs/qa_screenshots_weaponrot/
 ```
 
 > 改过 `scripts/data/*.gd` 后必须重跑 `generate_data.tscn`；

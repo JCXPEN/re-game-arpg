@@ -41,11 +41,6 @@
 ##       均分成若干页，翻页就是正常的"继续"），于是任何长度的文本都不会溢出、
 ##       也不会出现"要滚动才能看完"的对话框。
 ##
-## 【为什么量宽度要用 font.get_string_size 而不是等 Label 自己算】
-##   Label 开着 autowrap 时，`get_combined_minimum_size().x` 恒为 1（它可以折行，
-##   最小宽度就是"一个字的宽度"）。也就是说 **Label 永远不会告诉你"我想多宽"**。
-##   所以必须自己量：拿字体 + 字号算整句宽度，再决定面板给多宽。
-##
 ## 【互斥】
 ##   对话条与教程 / 帮助窗口**不能同时出现**。屏幕上已有别的窗口时，
 ##   新来的这一段进 PopupManager 的队列（按优先级），等前一个关闭后再显示；
@@ -101,6 +96,9 @@
 ## 【依赖谁】
 ##   EventBus（dialog_requested / dialog_sequence_requested / dialog_script_requested /
 ##   scene_changed / player_died）、PopupManager（互斥与统一关闭键）、AudioManager（逐字语音）。
+##   两个纯助手协作类（不独立存在，随本窗口创建）：
+##     DialogTypography —— 排版测量（量字 / 折行 / 分页 / 面板尺寸），见其文件头。
+##     DialogTypewriter —— 打字机状态（此刻显示几个字），见其文件头。
 class_name DialogUI
 extends CanvasLayer
 
@@ -132,32 +130,10 @@ const VOICE_EVERY: int = 3
 const POPUP_ID: StringName = &"dialog"
 
 ## 文本样式 → Theme 里的 Label 类型变体名。
-##
-## 【为什么用 match 而不是 const 字典】
-##   字典的键会用到 `DialogueLine.Style` 的枚举值，而"另一个 class_name 的枚举值"
-##   在 GDScript 里**不是常量表达式** → `const DICT = {...}` 直接编译失败
-##   （报 "isn't a constant expression"）。所以这里用 match，顺带还能让
-##   漏配的样式自动回落到常规正文。
-##
-## **改样式请改 `tools/generate_theme.gd` 里对应的变体定义，不要在这里写字号/颜色。**
+## 定义在 DialogTypography（排版域）；这里保留静态转发 ——
+## `DialogUI.variation_for` 是测试契约（dialogue_system_test 直接调用）。
 static func variation_for(style: DialogueLine.Style) -> StringName:
-	match style:
-		DialogueLine.Style.EMPHASIS:
-			return &"DialogEmphasisLabel"
-		DialogueLine.Style.WHISPER:
-			return &"DialogWhisperLabel"
-		DialogueLine.Style.SHOUT:
-			return &"DialogShoutLabel"
-		DialogueLine.Style.SYSTEM:
-			return &"DialogSystemLabel"
-		_:
-			return &"DialogBodyLabel"
-
-## 分页断句时优先作为断点的字符（尽量不在句子中间断开）。
-const BREAK_CHARS: String = "。！？；，、：」』）】…— \t"
-
-## 画布宽度，用于把自适应尺寸夹在屏幕内。
-const CANVAS_W: float = 320.0
+	return DialogTypography.variation_for(style)
 
 # ============================================================================
 # @export —— 节点
@@ -244,15 +220,15 @@ var _script: DialogueScript
 ## 整段播完后的回调（可能为空 Callable）。
 var _on_finished: Callable
 
-## 当前页的完整文本 / 已显示字符数 / 是否正在打字。
-var _full_text: String = ""
-var _char_count: float = 0.0
+## 排版测量助手与打字机状态（纯逻辑协作类，职责域拆分见各自文件头）。
+var _typo: DialogTypography
+var _tw: DialogTypewriter = DialogTypewriter.new()
+## 是否正在打字。**镜像 _tw.typing** —— 测试契约在实例上读这个字段。
 var _typing: bool = false
 ## 当前页的显示方式与参数。
 var _display: DialogueLine.Display = DialogueLine.Display.TYPEWRITER
 var _auto_delay: float = 1.6
 var _auto_elapsed: float = 0.0
-var _chars_per_sec: float = CHARS_PER_SEC
 ## 当前页所属的 DialogueLine（立绘 / 表情 / 语音都从它取）。
 var _current_line: DialogueLine
 ## 逐字语音：已打了几个字（每 `VOICE_EVERY` 个响一次）。
@@ -283,6 +259,12 @@ func _ready() -> void:
 	# （否则提示条停住不走、按钮点不动 → 又变成"关不掉"）。
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_resolve_nodes()
+	# 排版查询优先用对话条面板（它自己不挂变体），没有则退回提示条 ——
+	# 原因见 DialogTypography.theme_source 的说明。
+	if _bar_panel != null:
+		_typo = DialogTypography.new(_bar_panel)
+	else:
+		_typo = DialogTypography.new(_notice_panel)
 	_hide_bar()
 	_hide_notice()
 	# 鼠标优先：面板自己吃掉左键 = 推进；提示条则左键 = 立即收起。
@@ -378,16 +360,14 @@ func advance() -> void:
 
 
 ## 跳过打字机动画：立即把整句补全并把 `_typing` 置回 false。
-##
-## 【为什么抽成独立方法】"跳过动画"有两个入口（advance 的推进键、dismiss_by_player
-##   的关闭键），两处必须完全一致，否则又会出现"某个键按下时被判成没听完"的偏差。
+## 两个入口（advance 推进键 / dismiss_by_player 关闭键）都走这里，保证判定一致。
 func _finish_typing() -> void:
 	if not _typing:
 		return
-	_char_count = float(_full_text.length())
+	var full: String = _tw.finish()
 	_typing = false
 	if _text_label != null:
-		_text_label.text = _full_text
+		_text_label.text = full
 	_refresh_action_label()
 
 
@@ -535,19 +515,15 @@ func _hide_notice() -> void:
 
 
 ## 让提示条按文本自适应：短提示收窄，长提示换行、往下长。
+## 尺寸由 DialogTypography 量出来，这里只负责"摆"（锚定控件要靠 offset 才收得窄）。
 func _fit_notice(message: String) -> void:
 	if _notice_panel == null or _notice_text == null:
 		return
-	var type_name: StringName = &"Label"
-	var pad: float = _box_h_padding(_notice_panel)
-	var max_w: float = clampf(notice_max_width, notice_min_width, CANVAS_W)
-	var text_w: float = minf(_string_width(message, type_name, 0.0), max_w - pad)
-	var w: float = clampf(text_w + pad, notice_min_width, max_w)
-	var lines: int = _count_lines(message, type_name, w - pad)
-	var h: float = _box_v_padding(_notice_panel) + float(lines) * _line_height(type_name)
-	_notice_panel.custom_minimum_size = Vector2(w, h)
+	var size: Vector2 = _typo.measure_notice_size(message, _notice_panel,
+		notice_min_width, notice_max_width)
+	_notice_panel.custom_minimum_size = size
 	# 同对话条：锚定控件的宽度由 offset 决定，光设最小宽度是收不窄的。
-	var half: float = w * 0.5
+	var half: float = size.x * 0.5
 	_notice_panel.offset_left = -half
 	_notice_panel.offset_right = half
 
@@ -623,10 +599,10 @@ func _show_pending() -> void:
 ##   （逐行打字、逐行立绘、逐行自动推进）都要在推进逻辑里加一层 if。
 func _build_entries(script: DialogueScript) -> Array[Dictionary]:
 	var entries: Array[Dictionary] = []
-	var width: float = _bar_text_width()
+	var width: float = _typo.bar_text_width(_bar_panel, bar_max_width)
 	for line: DialogueLine in script.lines:
 		var style_name: StringName = variation_for(line.style)
-		var pages: PackedStringArray = _paginate(line.text, style_name, width)
+		var pages: PackedStringArray = _typo.paginate(line.text, style_name, width, bar_max_lines)
 		for i: int in pages.size():
 			entries.append({
 				"line": line,
@@ -649,8 +625,7 @@ func _show_entry() -> void:
 	var entry: Dictionary = _entries[_index]
 	var line: DialogueLine = entry["line"]
 	_current_line = line
-	_full_text = entry["text"]
-	_char_count = 0.0
+	var full_text: String = entry["text"]
 	_shake_time = 0.0
 	_voice_counter = 0
 
@@ -668,19 +643,16 @@ func _show_entry() -> void:
 	_display = line.resolve_display(_script.auto_advance_all)
 	_auto_delay = line.auto_delay if line.auto_delay > 0.0 else _script.auto_delay_default
 	_auto_elapsed = 0.0
-	_chars_per_sec = line.resolve_chars_per_sec(CHARS_PER_SEC)
 
 	# 4) 定尺寸（**必须在填文本之前**：宽度决定了要折几行）。
-	_fit_bar(_full_text, line.style)
+	_fit_bar(full_text, line.style)
 
-	# 5) 填内容。
+	# 5) 填内容：起打字机，再把打字标志镜像回本实例（测试契约读 _typing）。
+	_tw.begin(full_text, line.resolve_chars_per_sec(CHARS_PER_SEC),
+		_display == DialogueLine.Display.INSTANT)
+	_typing = _tw.typing
 	if _text_label != null:
-		if _display == DialogueLine.Display.INSTANT:
-			_text_label.text = _full_text
-			_typing = false
-		else:
-			_text_label.text = ""
-			_typing = true
+		_text_label.text = "" if _typing else full_text
 	_refresh_action_label()
 	_update_portrait()
 	_apply_avatar(line)
@@ -710,11 +682,10 @@ func _refresh_action_label() -> void:
 func _tick_typing(delta: float) -> void:
 	if not _typing or _text_label == null:
 		return
-	_char_count += delta * _chars_per_sec
-	var shown: int = mini(int(_char_count), _full_text.length())
-	_text_label.text = _full_text.substr(0, shown)
-	_play_voice(shown)
-	if shown >= _full_text.length():
+	var shown_text: String = _tw.tick(delta)
+	_text_label.text = shown_text
+	_play_voice(shown_text.length())
+	if not _tw.typing:
 		_typing = false
 		_refresh_action_label()
 
@@ -804,8 +775,7 @@ func _end_bar(completed: bool, release_popup: bool = true) -> void:
 	_script = null
 	_current_line = null
 	_on_finished = Callable()
-	_full_text = ""
-	_char_count = 0.0
+	_tw.reset()
 	_typing = false
 	_display = DialogueLine.Display.TYPEWRITER
 	is_open = false
@@ -848,141 +818,21 @@ func _call_safely(cb: Callable) -> void:
 
 
 # ============================================================================
-# 私有方法 —— 自适应排版（量字 → 定框）
+# 私有方法 —— 排版应用（"量字 → 定框"的测量全部在 DialogTypography）
 # ============================================================================
 
-## 把一个字符串换算成"在给定宽度下要占几行"。
+## 按文本给对话条定宽高：尺寸问 DialogTypography 要，这里只管写回面板。
 ##
-## 用 `Font.get_multiline_string_size` 而不是自己数换行符：它会应用引擎
-## 自己的折行规则（中日韩逐字断、西文按空格断），和 Label 实际渲染一致。
-##
-## type_name 是**主题里的类型名**（如 &"DialogBodyLabel" / &"Label"），
-## 不是当前挂在节点上的变体 —— 见 `_theme_source()` 的说明。
-func _count_lines(text: String, type_name: StringName, width: float) -> int:
-	var font: Font = _font_for(type_name)
-	if font == null or text.is_empty() or width <= 0.0:
-		return 1
-	var size: Vector2 = font.get_multiline_string_size(
-		text, HORIZONTAL_ALIGNMENT_LEFT, width, _font_size(type_name))
-	return maxi(1, int(round(size.y / maxf(1.0, _line_height(type_name)))))
-
-
-## 单行文本的自然宽度（不折行）。width_cap > 0 时结果被夹在上限内。
-func _string_width(text: String, type_name: StringName, width_cap: float) -> float:
-	var font: Font = _font_for(type_name)
-	if font == null or text.is_empty():
-		return 0.0
-	var w: float = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, _font_size(type_name)).x
-	if width_cap > 0.0:
-		w = minf(w, width_cap)
-	return w
-
-
-## 取"用来查主题的节点"。
-##
-## 【为什么不用 _text_label 自己查】
-##   `Control.get_theme_font(name, theme_type="")` 里传空 type 会回落到
-##   **该控件当前挂的类型变体**。而对话正文的变体是逐句变化的（BODY/WHISPER/SHOUT…），
-##   拿它去量"提示条的字体"会量到对话的变体上。
-##   所以统一用对话条面板（它自己不挂变体）作为查询入口，并显式传类型名。
-func _theme_source() -> Control:
-	if _bar_panel != null:
-		return _bar_panel
-	return _notice_panel
-
-
-func _font_for(type_name: StringName) -> Font:
-	var src: Control = _theme_source()
-	if src == null:
-		return null
-	return src.get_theme_font(&"font", type_name)
-
-
-func _font_size(type_name: StringName) -> int:
-	var src: Control = _theme_source()
-	if src != null:
-		var fs: int = src.get_theme_font_size(&"font_size", type_name)
-		if fs > 0:
-			return fs
-		var fallback: int = src.get_theme_font_size(&"font_size", &"Label")
-		if fallback > 0:
-			return fallback
-	return 12
-
-
-## 一行正文的高度 = 字体自身行高 + 主题的 line_spacing。
-##
-## 【为什么不用"字号 × 系数"估算】
-##   点阵字的 `get_height()` 与字号并不相等（FusionPixel12 在 12px 下是 14），
-##   估出来的行高会偏大或偏小，直接导致"预测高度"与实际渲染对不上 ——
-##   要么留白难看，要么内容被裁。这里取字体真实行高，误差为 0。
-func _line_height(type_name: StringName) -> float:
-	var font: Font = _font_for(type_name)
-	var base: float = float(_font_size(type_name))
-	if font != null:
-		base = float(font.get_height(_font_size(type_name)))
-	var spacing: float = 0.0
-	var src: Control = _theme_source()
-	if src != null:
-		spacing = float(src.get_theme_constant(&"line_spacing", type_name))
-	return base + spacing
-
-
-## 对话条正文可用的文字宽度上限（决定折行与分页）。
-func _bar_text_width() -> float:
-	if _bar_panel == null:
-		return bar_max_width
-	return maxf(32.0, bar_max_width - _box_h_padding(_bar_panel))
-
-
-## 对话条样式盒子左右内边距（含边框）。
-func _box_h_padding(box: Control) -> float:
-	if box == null:
-		return 0.0
-	var sb: StyleBox = _panel_stylebox(box)
-	if sb == null:
-		return 0.0
-	return sb.get_margin(SIDE_LEFT) + sb.get_margin(SIDE_RIGHT)
-
-
-func _box_v_padding(box: Control) -> float:
-	if box == null:
-		return 0.0
-	var sb: StyleBox = _panel_stylebox(box)
-	if sb == null:
-		return 0.0
-	return sb.get_margin(SIDE_TOP) + sb.get_margin(SIDE_BOTTOM)
-
-
-func _panel_stylebox(box: Control) -> StyleBox:
-	if box is PanelContainer:
-		return (box as PanelContainer).get_theme_stylebox(&"panel")
-	return box.get_theme_stylebox(&"panel")
-
-
-## 按文本给对话条定宽高。
-##
-## 【宽度】短句贴合成一条窄条，长句收到 bar_max_width 换行；
-##         再夹一个下限，避免"嗯。"这种只有一个字的碎片条。
-## 【高度】底部锚定、往上长。这里顺手把预测高度写进 custom_minimum_size：
-##         面板的高度本来就会由内容撑开，但 Label 在**下一帧**才重新折行，
-##         不先写预测值的话，换句时会看到"先按上一句的高度画一帧再跳"。
+## 【高度为什么底部锚定、往上长】
+##   面板的高度本来就会由内容撑开，但 Label 在**下一帧**才重新折行，
+##   不先写预测高度的话，换句时会看到"先按上一句的高度画一帧再跳"。
 func _fit_bar(text: String, style: DialogueLine.Style) -> void:
 	if _bar_panel == null:
 		return
-	var style_name: StringName = variation_for(style)
-	var pad: float = _box_h_padding(_bar_panel)
-	var max_w: float = clampf(bar_max_width, bar_min_width, CANVAS_W)
-	var text_cap: float = maxf(32.0, max_w - pad)
-	var natural: float = _string_width(text, style_name, text_cap)
-	# 文字区至少要放得下表头（说话人 + 按钮），否则按钮会被挤掉。
-	var header_min: float = _header_min_width()
-	var w: float = clampf(maxf(natural, header_min) + pad, bar_min_width, max_w)
-	var lines: int = _count_lines(text, style_name, w - pad)
-	var h: float = _box_v_padding(_bar_panel) + _header_height() + _vbox_separation() \
-		+ float(lines) * _line_height(style_name)
-	_bar_panel.custom_minimum_size = Vector2(w, h)
-	_apply_bar_offsets(w, h)
+	var size: Vector2 = _typo.measure_bar_size(text, variation_for(style), _bar_panel,
+		_header, _vbox, bar_min_width, bar_max_width)
+	_bar_panel.custom_minimum_size = size
+	_apply_bar_offsets(size.x, size.y)
 
 
 ## 把对话条摆成"宽 w、高 h、底边固定在 bar_bottom_margin"。
@@ -1004,81 +854,6 @@ func _apply_bar_offsets(width: float, height: float) -> void:
 	_bar_base_offsets[2] = half
 	_bar_base_offsets[3] = bottom
 	_restore_bar_offsets()
-
-
-## 把整段文本按 `bar_max_lines` 切成若干页（不需要分页时原样返回一页）。
-##
-## 【为什么均分而不是"每页塞满"】
-##   130 个字按每页 3 行切是 3+3+3 行；按"塞满"切会得到 3+3+3 也一样，
-##   但按上限切（例如 5 行上限、6 行文本）会得到 5+1 —— 第二页只有一个孤字，
-##   翻过去看到一行字很突兀。所以先算"需要几页"，再均分成每页的行数。
-func _paginate(text: String, style_name: StringName, width: float) -> PackedStringArray:
-	var single: PackedStringArray = PackedStringArray([text])
-	if bar_max_lines <= 0 or text.strip_edges() == "":
-		return single
-	var total: int = _count_lines(text, style_name, width)
-	if total <= bar_max_lines:
-		return single
-	var pages_needed: int = int(ceil(float(total) / float(bar_max_lines)))
-	var per_page: int = int(ceil(float(total) / float(pages_needed)))
-	var pages: PackedStringArray = PackedStringArray()
-	var rest: String = text
-	var guard: int = 0
-	while rest.strip_edges() != "" and guard < 64:
-		guard += 1
-		if _count_lines(rest, style_name, width) <= per_page:
-			pages.append(rest.strip_edges())
-			break
-		var cut: int = _cut_for_lines(rest, style_name, width, per_page)
-		if cut <= 0 or cut >= rest.length():
-			pages.append(rest.strip_edges())
-			break
-		pages.append(rest.substr(0, cut).strip_edges())
-		rest = rest.substr(cut)
-	return pages if not pages.is_empty() else single
-
-
-## 找一个切点：前缀刚好占 `max_lines` 行。
-## 先二分找"不超过 max_lines 的最长前缀"，再往前回退到最近的标点/空格，
-## 尽量避免把句子从中间劈开。
-func _cut_for_lines(text: String, style_name: StringName, width: float, max_lines: int) -> int:
-	var lo: int = 1
-	var hi: int = text.length()
-	var best: int = 0
-	while lo <= hi:
-		var mid: int = (lo + hi) / 2
-		if _count_lines(text.substr(0, mid), style_name, width) <= max_lines:
-			best = mid
-			lo = mid + 1
-		else:
-			hi = mid - 1
-	if best <= 0:
-		return 0
-	# 回退到最近的标点：最多退 10 个字，退不到就用二分结果（宁可断在句中也不要空转）。
-	var floor_i: int = maxi(1, best - 10)
-	for i: int in range(best, floor_i - 1, -1):
-		if BREAK_CHARS.contains(text.substr(i - 1, 1)):
-			return i
-	return best
-
-
-## 表头（说话人 + 按钮）的最小宽度。对话条不能比它窄，否则按钮会被挤没。
-func _header_min_width() -> float:
-	if _header == null:
-		return 0.0
-	return _header.get_combined_minimum_size().x
-
-
-func _header_height() -> float:
-	if _header == null:
-		return 0.0
-	return _header.get_combined_minimum_size().y
-
-
-func _vbox_separation() -> float:
-	if _vbox == null:
-		return 0.0
-	return float(_vbox.get_theme_constant(&"separation"))
 
 
 # ============================================================================
@@ -1121,9 +896,9 @@ func _update_portrait() -> void:
 			pos = Vector2(bar.end.x, bar.end.y - size.y)
 		_:
 			# CENTER：屏幕中央、压在对话条上方。
-			pos = Vector2((CANVAS_W - size.x) * 0.5, bar.position.y - size.y)
+			pos = Vector2((DialogTypography.CANVAS_W - size.x) * 0.5, bar.position.y - size.y)
 	pos += line.portrait_offset
-	pos.x = clampf(pos.x, 0.0, maxf(0.0, CANVAS_W - size.x))
+	pos.x = clampf(pos.x, 0.0, maxf(0.0, DialogTypography.CANVAS_W - size.x))
 	pos.y = clampf(pos.y, 0.0, 180.0)
 	_portrait.position = pos
 
@@ -1138,7 +913,7 @@ func _update_portrait() -> void:
 func _cap_portrait_size(native: Vector2) -> Vector2:
 	if native.x <= 0.0 or native.y <= 0.0:
 		return native
-	var limit: Vector2 = Vector2(CANVAS_W, 180.0)
+	var limit: Vector2 = Vector2(DialogTypography.CANVAS_W, 180.0)
 	if native.x <= limit.x and native.y <= limit.y:
 		return native
 	return native * minf(limit.x / native.x, limit.y / native.y)
