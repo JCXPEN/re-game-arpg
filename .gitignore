@@ -16,3 +16,6 @@ export_presets.cfg.bak
 # 系统杂项
 .DS_Store
 Thumbs.db
+
+# 个人 AI 助手笔记（本地保留，不公开）
+.workbuddy/
